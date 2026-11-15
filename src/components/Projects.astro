@@ -1,0 +1,24 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import ProjectCard from './ProjectCard.astro';
+import { getDict, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getDict(lang).projects;
+---
+
+<section id="projects" class="border-b border-line py-20 md:py-28" aria-labelledby="projects-title">
+  <div class="container-page">
+    <SectionHeader id="projects-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+    <div class="mt-12 grid gap-5 md:mt-16">
+      {
+        t.items.map((p, i) => (
+          <ProjectCard project={p} index={i} stackLabel={t.stackLabel} resultLabel={t.resultLabel} />
+        ))
+      }
+    </div>
+  </div>
+</section>

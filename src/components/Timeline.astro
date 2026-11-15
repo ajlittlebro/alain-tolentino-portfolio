@@ -1,0 +1,111 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import Icon from './Icon.astro';
+import { getDict, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getDict(lang).journey;
+
+const filters = [
+  { key: 'all', label: t.filters.all, count: t.items.length },
+  { key: 'edu', label: t.filters.edu, count: t.items.filter((i) => i.kind === 'edu').length },
+  { key: 'work', label: t.filters.work, count: t.items.filter((i) => i.kind === 'work').length },
+] as const;
+---
+
+<section id="journey" class="border-b border-line py-20 md:py-28" aria-labelledby="journey-title">
+  <div class="container-page">
+    <SectionHeader id="journey-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+
+    <div class="mt-12 grid gap-8 md:mt-16 md:grid-cols-12">
+      <div class="md:col-span-4">
+        <div
+          class="reveal inline-flex rounded-lg border border-line bg-surface p-1 md:sticky md:top-24"
+          role="group"
+          aria-label={t.filterLabel}
+          data-timeline-filters
+        >
+          {
+            filters.map((f) => (
+              <button
+                type="button"
+                data-filter={f.key}
+                aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                class="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm text-muted transition-colors hover:text-fg aria-pressed:bg-fg aria-pressed:text-bg"
+              >
+                {f.label}
+                <span class="font-mono text-[11px] opacity-70">{f.count}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <ol class="relative md:col-span-8" data-timeline>
+        <span class="absolute top-2 bottom-2 left-[7px] w-px bg-line" aria-hidden="true"></span>
+        {
+          t.items.map((item) => (
+            <li class="reveal relative pb-10 pl-9 last:pb-0" data-kind={item.kind}>
+              <span
+                class:list={[
+                  'absolute top-1.5 left-0 grid size-[15px] place-items-center border bg-bg',
+                  item.kind === 'edu' ? 'rounded-[4px] border-accent' : 'rounded-full border-fg',
+                ]}
+                aria-hidden="true"
+              >
+                <span class:list={['size-[5px]', item.kind === 'edu' ? 'rounded-[1px] bg-accent' : 'rounded-full bg-fg']} />
+              </span>
+
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-subtle">
+                <span>{item.period}</span>
+                <span aria-hidden="true">·</span>
+                <span class:list={[item.kind === 'edu' ? 'text-accent' : 'text-fg']}>{t.kindLabel[item.kind]}</span>
+              </div>
+              <h3 class="mt-2 text-lg font-semibold tracking-tight text-balance">{item.title}</h3>
+              <p class="mt-1 text-sm leading-6 text-muted">{item.org}</p>
+              <p class="mt-1 inline-flex items-center gap-1.5 text-xs text-subtle">
+                <Icon name="map-pin" size={12} />
+                {item.place}
+              </p>
+
+              <details class="group/d mt-3">
+                <summary class="inline-flex cursor-pointer list-none items-center gap-1.5 rounded-md text-sm font-medium text-accent select-none [&::-webkit-details-marker]:hidden">
+                  <span class="group-open/d:hidden">{t.showDetails}</span>
+                  <span class="hidden group-open/d:inline">{t.hideDetails}</span>
+                  <Icon name="chevron-down" size={14} class="transition-transform duration-200 group-open/d:rotate-180" />
+                </summary>
+                <ul class="mt-3 space-y-2 rounded-xl border border-line bg-surface p-4">
+                  {item.details.map((d) => (
+                    <li class="relative pl-5 text-sm leading-6">
+                      <span class="absolute top-[0.7rem] left-0 h-px w-2.5 bg-subtle" aria-hidden="true" />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<script>
+  const group = document.querySelector<HTMLElement>('[data-timeline-filters]');
+  const items = document.querySelectorAll<HTMLElement>('[data-timeline] > li[data-kind]');
+  group?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
+    if (!btn) return;
+    const filter = btn.dataset.filter;
+    group.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    items.forEach((li) => {
+      const show = filter === 'all' || li.dataset.kind === filter;
+      li.hidden = !show;
+      if (show) li.classList.add('is-visible');
+    });
+  });
+</script>

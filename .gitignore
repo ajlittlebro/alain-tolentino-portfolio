@@ -1,0 +1,22 @@
+# dependencies & build
+node_modules/
+dist/
+.astro/
+.vercel/
+
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# raw private inputs (contain cover letter & personal data)
+insumos/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# private planning / agent notes
+SPEC.md
+CLAUDE.md

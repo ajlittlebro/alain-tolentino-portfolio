@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import { getDict } from '../i18n';
+
+const de = getDict('de').notFound;
+const en = getDict('en').notFound;
+---
+
+<Base lang="de" route="home" title="404 – Alain Tolentino" noindex>
+  <section class="container-page grid min-h-[60vh] place-items-center py-24 text-center">
+    <div>
+      <p class="font-mono text-sm text-subtle">404</p>
+      <h1 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">{de.title}</h1>
+      <p class="mt-3 text-muted">{de.text}</p>
+      <p class="mt-1 text-sm text-subtle" lang="en">{en.title} – {en.text}</p>
+      <div class="mt-8 flex justify-center gap-3">
+        <a href="/" class="inline-flex h-11 items-center rounded-lg bg-fg px-5 text-sm font-medium text-bg hover:opacity-90">{de.back}</a>
+        <a href="/en/" lang="en" class="inline-flex h-11 items-center rounded-lg border border-line-strong px-5 text-sm font-medium hover:border-fg">{en.back}</a>
+      </div>
+    </div>
+  </section>
+</Base>
