@@ -34,6 +34,17 @@ export interface Project {
   wide?: boolean;
 }
 
+/** Small live-demo card (section C). */
+export interface DemoProject {
+  id: string;
+  title: string;
+  context: string;
+  scope: string;
+  text: string;
+  stack: string[];
+  links: ProjectLink[];
+}
+
 export interface TimelineItem {
   period: string;
   place: string;
@@ -80,6 +91,10 @@ export interface Dict {
     intro: string;
     tier1: string;
     tier2: string;
+    tier3: string;
+    tier3Intro: string;
+    securityNote: string;
+    demos: DemoProject[];
     labels: { role: string; build: string; outcome: string; stack: string; schema: string };
     items: Project[];
   };

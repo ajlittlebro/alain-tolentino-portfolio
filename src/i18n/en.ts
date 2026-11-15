@@ -64,6 +64,45 @@ export const en: Dict = {
       'Ordered by relevance. Each card states the actual scope – client project, university project or work in progress. Diagrams are simplified architecture schematics.',
     tier1: 'Featured projects',
     tier2: 'More projects',
+    tier3: 'Live demos & more web projects',
+    tier3Intro: 'Smaller web projects you can try directly in the browser.',
+    securityNote:
+      'The linked repositories were updated in November 2026 for security and data protection: credentials moved to environment variables, third-party personal data removed and an anonymized demo published.',
+    demos: [
+      {
+        id: 'boardgame',
+        title: 'Pensamiento Fimeño – Educational Board Game',
+        context: 'UANL · Creative Thinking course',
+        scope: 'University project',
+        text: 'Multiplayer board game in the browser with dice, player tokens and quiz questions; board drawn with Canvas 2D, sound effects via the Web Audio API, game state in localStorage.',
+        stack: ['HTML5', 'CSS3', 'JavaScript', 'Canvas 2D', 'Web Audio API'],
+        links: [
+          { kind: 'demo', label: 'Live demo', href: REPOS.boardGameDemo },
+          { kind: 'repo', label: 'Repository', href: REPOS.boardGame },
+        ],
+      },
+      {
+        id: 'sustainability',
+        title: 'Environment & Sustainability – Information Platform',
+        context: 'UANL · Team 4',
+        scope: 'University project',
+        text: 'Modular, responsive study platform with eight chapters in two units, support material and shared navigation.',
+        stack: ['HTML5', 'CSS3', 'Tailwind CSS', 'JavaScript'],
+        links: [
+          { kind: 'demo', label: 'Live demo', href: REPOS.sustainabilityDemo },
+          { kind: 'repo', label: 'Repository', href: REPOS.sustainability },
+        ],
+      },
+      {
+        id: 'event',
+        title: 'Event Landing Page (Wedding)',
+        context: 'Personal project',
+        scope: 'Demo · fictitious data',
+        text: 'Invitation page with countdown, Packery masonry gallery with equalized columns, AVIF images, custom lightbox, Google Calendar link and RSVP dialog. Public demo with anonymized content.',
+        stack: ['HTML5', 'CSS3', 'JavaScript', 'Packery', 'AVIF'],
+        links: [{ kind: 'demo', label: 'Showcase demo', href: REPOS.eventDemo }],
+      },
+    ],
     labels: {
       role: 'Context & role',
       build: 'Architecture & implementation',
@@ -143,15 +182,12 @@ export const en: Dict = {
         scopeTone: 'study',
         role: 'Frontend architecture, responsive UI/UX design and software testing in agile university projects (Scrum).',
         build: [
-          'Interactive crossword web application (educational game) built in agile sprints.',
+          'Interactive educational board game for the browser built in agile sprints.',
           'Modular sustainability information platform.',
         ],
         outcome: 'Functional, performance and hardware compatibility testing incl. bug documentation for a 3D virtual campus tour.',
         stack: ['JavaScript (ES6+)', 'HTML5', 'CSS3', 'UI/UX', 'Scrum', 'Software testing'],
-        links: [
-          { kind: 'demo', label: 'Live demo', href: REPOS.crosswordDemo },
-          { kind: 'repo', label: 'Repository', href: REPOS.crossword },
-        ],
+        links: [],
       },
       {
         id: 'sisdon',

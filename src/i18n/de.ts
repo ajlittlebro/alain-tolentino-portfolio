@@ -64,6 +64,45 @@ export const de: Dict = {
       'Nach Relevanz sortiert. Jede Karte nennt den tatsächlichen Rahmen – Kundenprojekt, Studienprojekt oder laufende Arbeit. Die Diagramme sind vereinfachte Architekturschemata.',
     tier1: 'Hauptprojekte',
     tier2: 'Weitere Projekte',
+    tier3: 'Live-Demos & weitere Web-Projekte',
+    tier3Intro: 'Kleinere Web-Projekte, die direkt im Browser ausprobiert werden können.',
+    securityNote:
+      'Die verlinkten Repositories wurden im November 2026 aus Sicherheits- und Datenschutzgründen überarbeitet: Zugangsdaten in Umgebungsvariablen ausgelagert, personenbezogene Daten Dritter entfernt und eine anonymisierte Demo veröffentlicht.',
+    demos: [
+      {
+        id: 'boardgame',
+        title: 'Pensamiento Fimeño – Lern-Brettspiel',
+        context: 'UANL · Pensamiento Creativo',
+        scope: 'Studienprojekt',
+        text: 'Mehrspieler-Brettspiel im Browser mit Würfel, Spielfiguren und Quizfragen; Spielbrett per Canvas 2D gezeichnet, Soundeffekte über die Web Audio API, Spielstand in localStorage.',
+        stack: ['HTML5', 'CSS3', 'JavaScript', 'Canvas 2D', 'Web Audio API'],
+        links: [
+          { kind: 'demo', label: 'Live-Demo', href: REPOS.boardGameDemo },
+          { kind: 'repo', label: 'Repository', href: REPOS.boardGame },
+        ],
+      },
+      {
+        id: 'sustainability',
+        title: 'Ambiente y Sustentabilidad – Informationsplattform',
+        context: 'UANL · Team 4',
+        scope: 'Studienprojekt',
+        text: 'Modulare, responsive Lernplattform mit acht Kapiteln in zwei Einheiten, Begleitmaterial und gemeinsamer Navigation.',
+        stack: ['HTML5', 'CSS3', 'Tailwind CSS', 'JavaScript'],
+        links: [
+          { kind: 'demo', label: 'Live-Demo', href: REPOS.sustainabilityDemo },
+          { kind: 'repo', label: 'Repository', href: REPOS.sustainability },
+        ],
+      },
+      {
+        id: 'event',
+        title: 'Event-Landingpage (Hochzeit)',
+        context: 'Privates Projekt',
+        scope: 'Demo · fiktive Daten',
+        text: 'Einladungsseite mit Countdown, Masonry-Galerie (Packery) mit ausgeglichenen Spalten, AVIF-Bildern, eigener Lightbox, Google-Calendar-Link und RSVP-Dialog. Öffentliche Demo mit anonymisierten Inhalten.',
+        stack: ['HTML5', 'CSS3', 'JavaScript', 'Packery', 'AVIF'],
+        links: [{ kind: 'demo', label: 'Showcase-Demo', href: REPOS.eventDemo }],
+      },
+    ],
     labels: {
       role: 'Kontext & Rolle',
       build: 'Architektur & Umsetzung',
@@ -143,15 +182,12 @@ export const de: Dict = {
         scopeTone: 'study',
         role: 'Frontend-Architektur, responsives UI/UX-Design und Software-Testing in agilen Studienprojekten (Scrum).',
         build: [
-          'Interaktive Crossword-Webanwendung (Lernspiel) in agilen Sprints.',
+          'Interaktives Lern-Brettspiel für den Browser in agilen Sprints.',
           'Modulare Informationsplattform zum Thema Nachhaltigkeit.',
         ],
         outcome: 'Funktions-, Performance- und Hardware-Kompatibilitätstests inkl. Fehlerdokumentation für einen virtuellen 3D-Fakultätsrundgang.',
         stack: ['JavaScript (ES6+)', 'HTML5', 'CSS3', 'UI/UX', 'Scrum', 'Software-Testing'],
-        links: [
-          { kind: 'demo', label: 'Live-Demo', href: REPOS.crosswordDemo },
-          { kind: 'repo', label: 'Repository', href: REPOS.crossword },
-        ],
+        links: [],
       },
       {
         id: 'sisdon',

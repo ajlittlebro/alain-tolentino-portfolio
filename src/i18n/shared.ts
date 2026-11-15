@@ -7,8 +7,11 @@ export const PROFILE = {
 
 export const REPOS = {
   shop: 'https://github.com/ajlittlebro/PWEB-APP-TIENDA',
-  crossword: 'https://github.com/ajlittlebro/Juego-De-Mesa-Pensamiento-Creativo',
-  crosswordDemo: 'https://pensamiento-fimenio.netlify.app/',
+  boardGame: 'https://github.com/ajlittlebro/Juego-De-Mesa-Pensamiento-Creativo',
+  boardGameDemo: 'https://pensamiento-fimenio.netlify.app/',
+  sustainability: 'https://github.com/ajlittlebro/Ambiente-Proyecto',
+  sustainabilityDemo: 'https://af1-ambiente-y-sustentabilidad.netlify.app/',
+  eventDemo: 'https://event-landing-demo.vercel.app/',
   ajschool: 'https://theajschool.web.app/',
   sisdon: 'https://github.com/ajlittlebro/Sistema-SISDON-Proyecto-TPOO',
 } as const;

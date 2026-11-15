@@ -2,6 +2,8 @@
 import SectionHeader from './SectionHeader.astro';
 import ProjectCard from './ProjectCard.astro';
 import ProjectCompact from './ProjectCompact.astro';
+import DemoCard from './DemoCard.astro';
+import Icon from './Icon.astro';
 import { getDict, type Lang } from '../i18n';
 
 interface Props {
@@ -26,5 +28,18 @@ const more = t.items.filter((p) => p.tier === 2);
     <div class="grid gap-5 md:grid-cols-2">
       {more.map((p, i) => <ProjectCompact project={p} index={featured.length + i} labels={t.labels} />)}
     </div>
+
+    <div class="mt-14 mb-5 flex flex-wrap items-baseline justify-between gap-2">
+      <p class="eyebrow">C · {t.tier3}</p>
+      <p class="text-sm text-muted">{t.tier3Intro}</p>
+    </div>
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {t.demos.map((d, i) => <DemoCard demo={d} index={i} />)}
+    </div>
+
+    <p class="mt-8 flex items-start gap-3 rounded-xl border border-line bg-surface px-4 py-3 text-sm leading-6 text-muted">
+      <Icon name="lock" size={16} class="mt-1 shrink-0 text-primary" />
+      <span>{t.securityNote}</span>
+    </p>
   </div>
 </section>
