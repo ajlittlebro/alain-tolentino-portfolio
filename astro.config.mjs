@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 // Public URL of the site. Adjust before deploying (or set SITE_URL in .env).
-const site = process.env.SITE_URL ?? 'https://alain-tolentino.vercel.app';
+const site = process.env.SITE_URL ?? 'https://alain-tolentino-portfolio.vercel.app';
 
 export default defineConfig({
   site,
