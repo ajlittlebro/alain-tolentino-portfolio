@@ -13,7 +13,7 @@ export const REPOS = {
 } as const;
 
 /**
- * CV download buttons. Keep `false` until PDFs WITHOUT personal data
- * (address, phone, date of birth) are placed in /public/cv/.
+ * CV download buttons. PDFs in /public/cv/ are generated WITHOUT personal data
+ * (no street address, phone or date of birth).
  */
-export const CV_ENABLED = false;
+export const CV_ENABLED = true;
