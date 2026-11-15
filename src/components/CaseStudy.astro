@@ -1,0 +1,120 @@
+---
+/** Level-1 flagship case study: narrative (left) + architecture artifact window (right). */
+import Icon from './Icon.astro';
+import ProjectLinks from './ProjectLinks.astro';
+import ShopDiagram from './diagrams/ShopDiagram.astro';
+import AjSchoolDiagram from './diagrams/AjSchoolDiagram.astro';
+import TudDiagram from './diagrams/TudDiagram.astro';
+import type { CaseStudy as CaseStudyT, Dict } from '../i18n';
+
+interface Props {
+  item: CaseStudyT;
+  labels: Dict['projects']['labels'];
+}
+const { item: c, labels } = Astro.props;
+
+const badgeClass = {
+  client: 'border-accent/40 bg-accent-soft text-accent',
+  study: 'border-strong text-ink-2',
+  ongoing: 'border-dashed border-strong text-ink-2',
+}[c.badgeTone];
+
+const blocks = [
+  { label: labels.role, text: c.role },
+  { label: labels.architecture, text: c.architecture },
+  { label: labels.outcome, text: c.outcome },
+];
+---
+
+<article class="panel reveal overflow-hidden" aria-labelledby={`case-${c.id}`}>
+  <!-- index strip -->
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-hairline px-5 py-3 sm:px-7">
+    <p class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-3 uppercase">
+      <span class="font-semibold text-workbench-ink">{c.index}</span>
+      <span aria-hidden="true">/</span>
+      <span class="normal-case">{c.period}</span>
+      <span aria-hidden="true">/</span>
+      <span class="normal-case">{c.place}</span>
+    </p>
+    <span class:list={['inline-flex items-center gap-1.5 rounded-md border px-2 py-1 font-mono text-[11px] leading-4', badgeClass]}>
+      {c.badgeTone === 'client' && <span class="size-1.5 rounded-full bg-current" aria-hidden="true" />}
+      {c.badge}
+    </span>
+  </div>
+
+  <div class="grid lg:grid-cols-12">
+    <!-- Narrative -->
+    <div class="flex flex-col p-5 sm:p-7 lg:col-span-6">
+      <h3 id={`case-${c.id}`} class="text-[1.45rem] leading-tight font-bold text-balance text-brand sm:text-[1.7rem]">{c.title}</h3>
+
+      <dl class="mt-6 space-y-5">
+        {
+          blocks.map((b) => (
+            <div>
+              <dt class="font-mono text-[11px] font-medium tracking-wider text-ink-3 uppercase">{b.label}</dt>
+              <dd class="mt-1.5 text-[15px] text-pretty text-ink-2">{b.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      {
+        c.metric && (
+          <p class="mt-5 flex items-baseline gap-3 border-l-2 border-workbench pl-3">
+            <span class="font-mono text-2xl font-semibold text-accent">{c.metric.value}</span>
+            <span class="text-sm text-ink-2">{c.metric.label}</span>
+          </p>
+        )
+      }
+
+      <ul class="mt-6 flex flex-wrap gap-1.5" aria-label={labels.stack}>
+        {c.stack.map((s) => <li class="rounded-md border border-hairline bg-subtle px-2 py-1 font-mono text-[11px] leading-4 text-ink-2">{s}</li>)}
+      </ul>
+
+      <details class="group/d mt-6 rounded-lg border border-hairline bg-subtle/60">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 font-mono text-xs font-medium tracking-wide text-ink uppercase">
+          {c.specsTitle}
+          <Icon name="chevron-down" size={15} class="shrink-0 text-ink-3 transition-transform duration-200 group-open/d:rotate-180" />
+        </summary>
+        <ul class="space-y-2 border-t border-hairline px-4 py-3">
+          {
+            c.specs.map((s) => (
+              <li class="relative pl-4 font-mono text-[12px] leading-5 text-ink-2">
+                <span class="absolute top-2 left-0 size-1.5 rounded-full bg-workbench" aria-hidden="true" />
+                {s}
+              </li>
+            ))
+          }
+        </ul>
+      </details>
+
+      {
+        (c.links.length > 0 || c.note) && (
+          <div class="mt-6 border-t border-hairline pt-5">
+            <ProjectLinks links={c.links} note={c.note} />
+          </div>
+        )
+      }
+    </div>
+
+    <!-- Artifact window -->
+    <figure class="flex flex-col border-t border-hairline bg-subtle/40 lg:col-span-6 lg:border-t-0 lg:border-l">
+      <div class="flex items-center gap-2 border-b border-hairline px-4 py-2.5">
+        <span class="size-2.5 rounded-full bg-strong" aria-hidden="true"></span>
+        <span class="size-2.5 rounded-full bg-strong" aria-hidden="true"></span>
+        <span class="size-2.5 rounded-full bg-workbench" aria-hidden="true"></span>
+        <span class="ml-2 truncate font-mono text-[11px] text-ink-3">{c.id}.architecture.svg</span>
+      </div>
+      <div class="blueprint flex-1 p-4 sm:p-6">
+        <div class="lg:sticky lg:top-28">
+        {c.diagram === 'shop' && <ShopDiagram title={c.diagramTitle} desc={c.diagramDesc} />}
+        {c.diagram === 'ajschool' && <AjSchoolDiagram title={c.diagramTitle} desc={c.diagramDesc} metric={c.metric?.value ?? '+15 %'} />}
+        {c.diagram === 'tud' && <TudDiagram title={c.diagramTitle} desc={c.diagramDesc} />}
+        </div>
+      </div>
+      <figcaption class="border-t border-hairline px-4 py-2.5 font-mono text-[10.5px] tracking-wide text-ink-3 uppercase">
+        Fig. {c.index} · {labels.artifact}
+      </figcaption>
+    </figure>
+  </div>
+</article>

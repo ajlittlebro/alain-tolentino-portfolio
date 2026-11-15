@@ -2,8 +2,9 @@
 import Base from '../layouts/Base.astro';
 import Hero from './Hero.astro';
 import Projects from './Projects.astro';
+import About from './About.astro';
 import Timeline from './Timeline.astro';
-import Skills from './Skills.astro';
+import Stack from './Stack.astro';
 import Contact from './Contact.astro';
 import type { Lang } from '../i18n';
 
@@ -16,7 +17,8 @@ const { lang } = Astro.props;
 <Base lang={lang} route="home">
   <Hero lang={lang} />
   <Projects lang={lang} />
+  <About lang={lang} />
   <Timeline lang={lang} />
-  <Skills lang={lang} />
+  <Stack lang={lang} />
   <Contact lang={lang} />
 </Base>

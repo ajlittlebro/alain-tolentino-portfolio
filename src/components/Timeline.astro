@@ -1,6 +1,6 @@
 ---
-/** Education and experience as two columns, in exactly the order used in the Lebenslauf. */
-import SectionHeader from './SectionHeader.astro';
+/** 03 // Werdegang – two parallel Swiss timelines (order exactly as in the Lebenslauf) with focus dimming. */
+import SectionHead from './SectionHead.astro';
 import Icon from './Icon.astro';
 import { getDict, type Lang, type TimelineItem } from '../i18n';
 
@@ -8,71 +8,54 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = getDict(lang).journey;
+const d = getDict(lang);
+const t = d.journey;
 
-const columns: { key: string; prefix: string; title: string; items: TimelineItem[]; shape: 'square' | 'circle' }[] = [
-  { key: 'edu', prefix: 'A', title: t.eduTitle, items: t.education, shape: 'square' },
-  { key: 'work', prefix: 'B', title: t.workTitle, items: t.experience, shape: 'circle' },
+const columns: { prefix: string; title: string; items: TimelineItem[] }[] = [
+  { prefix: 'A', title: t.eduTitle, items: t.education },
+  { prefix: 'B', title: t.workTitle, items: t.experience },
 ];
 ---
 
-<section id="journey" class="border-b border-line py-20 md:py-28" aria-labelledby="journey-title">
+<section id={d.sections.journey} class="border-b border-hairline py-20 md:py-28" aria-labelledby="journey-title">
   <div class="container-page">
-    <SectionHeader id="journey-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+    <SectionHead id="journey-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
 
     <div class="mt-14 grid gap-12 lg:grid-cols-2 lg:gap-10">
       {
         columns.map((col) => (
           <div>
-            <h3 class="flex items-center gap-3 border-b border-line-strong pb-3 text-base font-semibold tracking-tight text-primary">
-              <span class="font-mono text-xs font-normal text-subtle">{col.prefix}</span>
+            <h3 class="flex items-center gap-3 border-b border-strong pb-3 text-base font-bold text-brand">
+              <span class="font-mono text-xs font-medium text-workbench-ink">{col.prefix}</span>
               {col.title}
-              <span class="ml-auto font-mono text-xs font-normal text-subtle">{String(col.items.length).padStart(2, '0')}</span>
+              <span class="ml-auto font-mono text-xs font-normal text-ink-3">{String(col.items.length).padStart(2, '0')}</span>
             </h3>
-
-            <ol class="relative mt-6">
-              <span class="absolute top-2 bottom-2 left-[7px] w-px bg-line-strong" aria-hidden="true" />
+            <ol class="dim-group mt-5 grid gap-3">
               {col.items.map((item, i) => (
-                <li class="reveal relative pb-9 pl-9 last:pb-0">
-                  <span
-                    class:list={[
-                      'absolute top-1 left-0 grid size-[15px] place-items-center border-[1.5px] border-primary bg-bg',
-                      col.shape === 'square' ? 'rounded-[3px]' : 'rounded-full',
-                    ]}
-                    aria-hidden="true"
-                  >
-                    <span class:list={['size-[5px] bg-primary', col.shape === 'square' ? 'rounded-[1px]' : 'rounded-full']} />
-                  </span>
-
-                  <p class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-subtle">
-                    <span class="text-primary">
+                <li class="panel dim-item reveal grid gap-1 p-4 sm:grid-cols-[9.5rem_1fr] sm:gap-5 sm:p-5">
+                  <p class="font-mono text-xs leading-5 text-ink-3">
+                    <span class="font-semibold text-workbench-ink">
                       {col.prefix}
                       {i + 1}
                     </span>
-                    <span>{item.period}</span>
+                    <span class="block">{item.period}</span>
                   </p>
-                  <h4 class="mt-1.5 text-base font-semibold tracking-tight text-balance">{item.title}</h4>
-                  <p class="mt-1 text-sm leading-6 text-muted">{item.org}</p>
-                  <p class="mt-1 inline-flex items-center gap-1.5 font-mono text-[11px] text-subtle">
-                    <Icon name="map-pin" size={12} />
-                    {item.place}
-                  </p>
-
-                  <details class="group/d mt-2.5">
-                    <summary class="inline-flex cursor-pointer list-none items-center gap-1.5 rounded-md text-sm font-medium text-accent select-none [&::-webkit-details-marker]:hidden">
-                      <span class="group-open/d:hidden">{t.showDetails}</span>
-                      <span class="hidden group-open/d:inline">{t.hideDetails}</span>
-                      <Icon name="chevron-down" size={14} class="transition-transform duration-200 group-open/d:rotate-180" />
-                    </summary>
-                    <ul class="mt-3 space-y-2 rounded-xl border border-line bg-surface p-4">
-                      {item.details.map((d) => (
-                        <li class="relative pl-4 text-sm leading-6">
-                          <span class="absolute top-[0.7rem] left-0 h-px w-2 bg-primary" aria-hidden="true" />
-                          {d}
+                  <div class="min-w-0">
+                    <h4 class="font-display text-[15px] leading-snug font-bold text-ink">{item.title}</h4>
+                    <p class="mt-1 text-sm text-ink-2">{item.org}</p>
+                    <p class="mt-1 inline-flex items-center gap-1.5 font-mono text-[11px] text-ink-3">
+                      <Icon name="map-pin" size={12} />
+                      {item.place}
+                    </p>
+                    <ul class="mt-2.5 space-y-1.5">
+                      {item.details.map((x) => (
+                        <li class="relative pl-4 text-[13px] leading-5 text-ink-2">
+                          <span class="absolute top-[0.45rem] left-0 h-px w-2 bg-brand" aria-hidden="true" />
+                          {x}
                         </li>
                       ))}
                     </ul>
-                  </details>
+                  </div>
                 </li>
               ))}
             </ol>

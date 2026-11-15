@@ -1,0 +1,30 @@
+---
+/** Modular availability bar – content lives in src/config/career.ts. */
+import { CAREER_STATUS } from '../config/career';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = CAREER_STATUS[lang];
+---
+
+{
+  s.available && (
+    <aside class="border-b border-hairline bg-surface" aria-label={s.label}>
+      <p class="container-page flex items-start gap-3 py-2.5 font-mono text-[11px] leading-5 tracking-wide text-ink-2 uppercase">
+        <span class="pulse-dot mt-1.5" aria-hidden="true" />
+        <span>
+          <span class="font-semibold text-ink">{s.label}:</span>{' '}
+          {s.items.map((item, i) => (
+            <>
+              {i > 0 && <span class="px-1.5 text-ink-3" aria-hidden="true">·</span>}
+              <span class="sm:inline-block">{item}</span>
+            </>
+          ))}
+        </span>
+      </p>
+    </aside>
+  )
+}

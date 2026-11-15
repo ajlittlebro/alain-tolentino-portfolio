@@ -1,8 +1,5 @@
 ---
-/**
- * Button that copies the public e-mail address to the clipboard
- * (navigator.clipboard.writeText) and shows "Kopiert!" / "Copied!".
- */
+/** Copies the public e-mail address (logic in src/scripts/site.ts). */
 import Icon from './Icon.astro';
 import { getDict, PROFILE, type Lang } from '../i18n';
 
@@ -20,46 +17,12 @@ const t = getDict(lang).copyEmail;
   data-label-copied={t.copied}
   data-sr-copied={t.srCopied}
   class:list={[
-    'group inline-flex h-11 items-center gap-2 rounded-lg border border-line-strong bg-surface px-4 text-sm font-medium transition-colors duration-200 ease-out hover:border-primary data-[copied=true]:border-ok data-[copied=true]:text-ok',
+    'group inline-flex h-11 items-center gap-2 rounded-lg border border-strong bg-surface px-4 text-sm font-medium text-ink transition-colors duration-200 hover:border-brand data-[copied=true]:border-available',
     className,
   ]}
 >
-  <Icon name="copy" class="copy-icon" />
-  <Icon name="check" class="check-icon hidden" />
+  <Icon name="copy" class="group-data-[copied=true]:hidden" />
+  <Icon name="check" class="hidden text-available group-data-[copied=true]:block" />
   <span class="copy-label">{t.copy}</span>
   <span class="sr-only" aria-live="polite" data-copy-status></span>
 </button>
-
-<script>
-  document.querySelectorAll<HTMLButtonElement>('[data-copy-email]').forEach((btn) => {
-    const label = btn.querySelector<HTMLElement>('.copy-label');
-    const status = btn.querySelector<HTMLElement>('[data-copy-status]');
-    const original = label?.textContent ?? '';
-    let timer: number | undefined;
-
-    btn.addEventListener('click', async () => {
-      const email = btn.dataset.copyEmail ?? '';
-      try {
-        await navigator.clipboard.writeText(email);
-      } catch {
-        // Clipboard API unavailable (e.g. insecure context): open the mail client instead.
-        window.location.href = `mailto:${email}`;
-        return;
-      }
-      btn.dataset.copied = 'true';
-      if (label) label.textContent = btn.dataset.labelCopied ?? original;
-      if (status) status.textContent = btn.dataset.srCopied ?? '';
-      btn.querySelector('.copy-icon')?.classList.add('hidden');
-      btn.querySelector('.check-icon')?.classList.remove('hidden');
-
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => {
-        delete btn.dataset.copied;
-        if (label) label.textContent = original;
-        if (status) status.textContent = '';
-        btn.querySelector('.copy-icon')?.classList.remove('hidden');
-        btn.querySelector('.check-icon')?.classList.add('hidden');
-      }, 2000);
-    });
-  });
-</script>

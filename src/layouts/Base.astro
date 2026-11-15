@@ -1,10 +1,16 @@
 ---
-import '@fontsource-variable/inter';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/500.css';
+// Self-hosted fonts only (no Google Fonts requests – DSGVO)
+import '@fontsource/plus-jakarta-sans/latin-600.css';
+import '@fontsource/plus-jakarta-sans/latin-700.css';
+import '@fontsource/plus-jakarta-sans/latin-800.css';
+import '@fontsource-variable/inter/wght.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import '@fontsource/jetbrains-mono/latin-600.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CareerStatusBanner from '../components/CareerStatusBanner.astro';
 import { getDict, PROFILE, ROUTES, type Lang, type RouteKey } from '../i18n';
 
 interface Props {
@@ -100,9 +106,10 @@ const personJsonLd = {
     </script>
   </head>
   <body class="min-h-dvh">
+    <CareerStatusBanner lang={lang} />
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-primary-fg"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-md focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:text-on-brand"
     >
       {t.nav.skip}
     </a>
@@ -113,27 +120,7 @@ const personJsonLd = {
     <Footer lang={lang} />
 
     <script>
-      // Enable colour transitions only after first paint.
-      requestAnimationFrame(() => document.documentElement.classList.add('theme-ready'));
-
-      // Reveal-on-scroll (respects reduced motion via CSS).
-      const items = document.querySelectorAll<HTMLElement>('.reveal');
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                io.unobserve(entry.target);
-              }
-            }
-          },
-          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
-        );
-        items.forEach((el) => io.observe(el));
-      } else {
-        items.forEach((el) => el.classList.add('is-visible'));
-      }
+      import '../scripts/site.ts';
     </script>
   </body>
 </html>

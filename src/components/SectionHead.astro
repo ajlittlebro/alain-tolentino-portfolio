@@ -1,0 +1,23 @@
+---
+/** Swiss-grid section header: index rule with crossing markers (+), title and intro. */
+interface Props {
+  id: string;
+  eyebrow: string;
+  title: string;
+  intro?: string;
+}
+const { id, eyebrow, title, intro } = Astro.props;
+---
+
+<header class="reveal">
+  <div class="flex items-center gap-3">
+    <span class="cross" aria-hidden="true"></span>
+    <p class="eyebrow min-w-0 font-medium text-brand">{eyebrow}</p>
+    <span class="h-px min-w-6 flex-1 bg-strong" aria-hidden="true"></span>
+    <span class="cross" aria-hidden="true"></span>
+  </div>
+  <div class="mt-8 grid gap-5 md:grid-cols-12 md:gap-8">
+    <h2 id={id} class="display-lg text-balance text-brand md:col-span-7">{title}</h2>
+    {intro && <p class="max-w-xl text-base text-pretty text-ink-2 md:col-span-5 md:pt-2">{intro}</p>}
+  </div>
+</header>

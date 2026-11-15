@@ -2,59 +2,65 @@
 
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
-/* ---------- Design tokens: "Swiss-German Technical Dossier" ----------
-   Palette synced with the Lebenslauf (navy #143656). */
+/* =====================================================================
+   v3 · "Swiss-German Editorial Engineering & Digital Workbench"
+   Semantic tokens. Light = "Engineering Paper", dark = "Midnight Workbench".
+   ===================================================================== */
 :root {
-  --bg: #f8fafc; /* technical paper */
-  --surface: #ffffff;
-  --surface-2: #f1f5f9;
-  --fg: #0f172a;
-  --muted: #475569;
-  --subtle: #64748b;
-  --line: #e2e8f0;
-  --line-strong: #cbd5e1;
-  --primary: #143656; /* CV navy */
-  --primary-fg: #ffffff;
-  --accent: #1d4ed8;
-  --accent-fg: #ffffff;
+  --bg-canvas: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #475569;
+  --brand-primary: #143656; /* Prussian navy from the Lebenslauf */
+  --accent-primary: #1d4ed8;
+  --accent-workbench: #d97706; /* decorative only (nodes, markers) – not used for body text */
+  --workbench-ink: #b45309; /* amber for text: ≥ 4.5:1 on canvas/surface/subtle */
+  --status-available: #059669;
+  --border-hairline: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --on-brand: #ffffff;
   --accent-soft: #eff6ff;
-  --ok: #059669;
   color-scheme: light;
 }
 
 [data-theme='dark'] {
-  --bg: #0b1120;
-  --surface: #111827;
-  --surface-2: #162033;
-  --fg: #f1f5f9;
-  --muted: #94a3b8;
-  --subtle: #7d8ba1;
-  --line: #1e293b;
-  --line-strong: #334155;
-  --primary: #e2e8f0;
-  --primary-fg: #0b1120;
-  --accent: #60a5fa;
-  --accent-fg: #0b1120;
+  --bg-canvas: #0b1120;
+  --bg-surface: #0f172a;
+  --bg-subtle: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --brand-primary: #38bdf8;
+  --accent-primary: #60a5fa;
+  --accent-workbench: #f59e0b;
+  --workbench-ink: #f59e0b;
+  --status-available: #10b981;
+  --border-hairline: #1e293b;
+  --border-strong: #334155;
+  --on-brand: #0b1120;
   --accent-soft: #0c1e36;
-  --ok: #34d399;
   color-scheme: dark;
 }
 
 @theme inline {
-  --color-bg: var(--bg);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-fg: var(--fg);
-  --color-muted: var(--muted);
-  --color-subtle: var(--subtle);
-  --color-line: var(--line);
-  --color-line-strong: var(--line-strong);
-  --color-primary: var(--primary);
-  --color-primary-fg: var(--primary-fg);
-  --color-accent: var(--accent);
-  --color-accent-fg: var(--accent-fg);
+  --color-canvas: var(--bg-canvas);
+  --color-surface: var(--bg-surface);
+  --color-subtle: var(--bg-subtle);
+  --color-ink: var(--text-primary);
+  --color-ink-2: var(--text-secondary);
+  --color-ink-3: var(--text-muted);
+  --color-brand: var(--brand-primary);
+  --color-accent: var(--accent-primary);
+  --color-workbench: var(--accent-workbench);
+  --color-workbench-ink: var(--workbench-ink);
+  --color-available: var(--status-available);
+  --color-hairline: var(--border-hairline);
+  --color-strong: var(--border-strong);
+  --color-on-brand: var(--on-brand);
   --color-accent-soft: var(--accent-soft);
-  --color-ok: var(--ok);
+  --font-display: 'Plus Jakarta Sans', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 }
@@ -63,37 +69,55 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 6.5rem;
     -webkit-text-size-adjust: 100%;
   }
   body {
-    background: var(--bg);
-    color: var(--fg);
+    background: var(--bg-canvas);
+    color: var(--text-primary);
     font-family: var(--font-sans);
+    line-height: 1.65;
     font-feature-settings: 'cv11', 'ss01', 'ss03';
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
+  /* German compound words must never break a card at 375 px */
+  :lang(de) :is(p, li, dd, dt, h1, h2, h3, h4, a, span, summary) {
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+  :is(p, li, dd, h1, h2, h3, h4) {
+    overflow-wrap: break-word;
+  }
+  .font-mono,
+  code {
+    hyphens: manual;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+  }
   ::selection {
-    background: var(--primary);
-    color: var(--primary-fg);
+    background: var(--brand-primary);
+    color: var(--on-brand);
   }
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-primary);
     outline-offset: 3px;
     border-radius: 4px;
   }
-  /* Smooth theme transition only after first paint */
   html.theme-ready body,
   html.theme-ready .theme-transition {
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 }
 
-/* ---------- Utilities ---------- */
+/* ---------- Layout utilities ---------- */
 @utility container-page {
   width: 100%;
-  max-width: 72rem;
+  max-width: 1200px;
   margin-inline: auto;
   padding-inline: 1.25rem;
   @media (width >= 48rem) {
@@ -101,14 +125,25 @@
   }
 }
 
-/* Monospace technical label, e.g. "01 // PROJEKTE" */
+/* Monospace technical label, e.g. "01 // AUSGEWÄHLTE PROJEKTE" */
 @utility eyebrow {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  line-height: 1rem;
+  line-height: 1.1rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--subtle);
+  color: var(--text-muted);
+}
+
+@utility display-xl {
+  font-size: clamp(2.35rem, 1.35rem + 4.4vw, 4.4rem);
+  line-height: 1.02;
+  font-weight: 800;
+}
+@utility display-lg {
+  font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3rem);
+  line-height: 1.08;
+  font-weight: 700;
 }
 
 @utility link-underline {
@@ -123,31 +158,97 @@
   }
 }
 
-/* Card with a subtle 200ms border/shadow transition */
-@utility card {
-  border: 1px solid var(--line);
-  background: var(--surface);
-  border-radius: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-  &:hover {
-    border-color: var(--line-strong);
-    box-shadow: 0 12px 32px -18px rgb(15 23 42 / 0.22);
-  }
+@utility panel {
+  border: 1px solid var(--border-hairline);
+  background: var(--bg-surface);
+  border-radius: 0.875rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
-/* Technical grid paper (used behind diagrams and the hero) */
-@utility grid-paper {
+/* Architectural grid for hero / diagram backgrounds (≈ 3–4 % visible) */
+@utility blueprint {
   background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 24px 24px;
+    linear-gradient(color-mix(in srgb, var(--text-primary) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--text-primary) 4%, transparent) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ---------- Focus dimming (pure CSS) ----------
+   Inside a .dim-group, hovering/focusing one .dim-item fades its siblings. */
+@media (hover: hover) {
+  .dim-group:has(.dim-item:is(:hover, :focus-within)) .dim-item:not(:hover, :focus-within) {
+    opacity: 0.6;
+  }
+}
+.dim-item:is(:hover, :focus-within) {
+  border-color: var(--accent-primary);
+}
+
+/* Swiss grid crossing marker (+) */
+.cross {
+  position: relative;
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  flex: none;
+}
+.cross::before,
+.cross::after {
+  content: '';
+  position: absolute;
+  background: var(--border-strong);
+}
+.cross::before {
+  left: 5px;
+  top: 0;
+  width: 1px;
+  height: 11px;
+}
+.cross::after {
+  top: 5px;
+  left: 0;
+  height: 1px;
+  width: 11px;
+}
+
+/* Availability pulse */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.pulse-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--status-available);
+  flex: none;
+}
+.pulse-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+/* details/summary marker reset */
+summary::-webkit-details-marker {
+  display: none;
 }
 
 /* ---------- Reveal on scroll ---------- */
 .reveal {
   opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .reveal.is-visible {
   opacity: 1;
@@ -166,10 +267,14 @@ html:not(.js) .reveal {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
   .reveal {
     opacity: 1;
     transform: none;
+  }
+  .pulse-dot::after {
+    display: none;
   }
 }

@@ -1,85 +1,90 @@
 ---
+/** 05 // Lebenslauf & Kontakt – direct contact actions + CV download hub. */
 import Icon from './Icon.astro';
 import CopyEmail from './CopyEmail.astro';
-import { getDict, PROFILE, CV_ENABLED, type Lang } from '../i18n';
+import SectionHead from './SectionHead.astro';
+import { getDict, PROFILE, type Lang } from '../i18n';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const dict = getDict(lang);
-const t = dict.contact;
-const hero = dict.hero;
+const d = getDict(lang);
+const t = d.contact;
 ---
 
-<section id="contact" class="py-20 md:py-28" aria-labelledby="contact-title">
+<section id={d.sections.contact} class="py-20 md:py-28" aria-labelledby="contact-title">
   <div class="container-page">
-    <div class="reveal">
-      <div class="flex items-center gap-4">
-        <p class="eyebrow shrink-0 text-primary">{t.eyebrow}</p>
-        <span class="h-px flex-1 bg-line-strong" aria-hidden="true"></span>
+    <SectionHead id="contact-title" eyebrow={t.eyebrow} title={t.title} intro={t.text} />
+
+    <div class="mt-14 grid gap-6 lg:grid-cols-12 lg:items-start">
+      <!-- Direct contact -->
+      <div class="panel reveal p-6 sm:p-8 lg:col-span-7">
+        <p class="eyebrow">{t.emailLabel}</p>
+        <a href={`mailto:${PROFILE.email}`} class="link-underline mt-2 inline-block font-mono text-[15px] font-medium break-all text-brand min-[400px]:text-lg sm:text-2xl">
+          {PROFILE.email}
+        </a>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a
+            href={`mailto:${PROFILE.email}`}
+            class="inline-flex h-11 items-center gap-2 rounded-lg bg-brand px-5 text-sm font-semibold text-on-brand transition-opacity duration-200 hover:opacity-90"
+          >
+            <Icon name="mail" />
+            {t.send}
+          </a>
+          <CopyEmail lang={lang} />
+        </div>
+
+        <p class="eyebrow mt-8">{t.profilesLabel}</p>
+        <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+          <li>
+            <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2.5 rounded-lg border border-hairline px-3.5 py-3 text-sm transition-colors duration-200 hover:border-accent">
+              <Icon name="github" size={17} />
+              <span class="font-mono">{PROFILE.githubHandle}</span>
+              <Icon name="arrow-up-right" size={14} class="ml-auto text-ink-3" />
+            </a>
+          </li>
+          <li>
+            <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2.5 rounded-lg border border-hairline px-3.5 py-3 text-sm transition-colors duration-200 hover:border-accent">
+              <Icon name="linkedin" size={17} />
+              <span class="font-mono">{PROFILE.linkedinHandle}</span>
+              <Icon name="arrow-up-right" size={14} class="ml-auto text-ink-3" />
+            </a>
+          </li>
+        </ul>
       </div>
 
-      <div class="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-12">
-        <div class="lg:col-span-6">
-          <h2 id="contact-title" class="text-3xl font-semibold tracking-tight text-balance text-primary sm:text-5xl">{t.title}</h2>
-          <p class="mt-5 max-w-xl text-base leading-7 text-pretty text-muted sm:text-lg sm:leading-8">{t.text}</p>
-        </div>
-
-        <div class="overflow-hidden rounded-xl border border-line bg-surface lg:col-span-6">
-          <div class="border-b border-line p-5 sm:p-6">
-            <p class="eyebrow">{t.emailLabel}</p>
-            <a
-              href={`mailto:${PROFILE.email}`}
-              class="link-underline mt-1.5 inline-block font-mono text-base font-medium tracking-tight break-all text-primary sm:text-lg"
-            >
-              {PROFILE.email}
-            </a>
-            <div class="mt-4 flex flex-wrap gap-2">
-              <CopyEmail lang={lang} />
-              <a
-                href={`mailto:${PROFILE.email}`}
-                class="inline-flex h-11 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-fg transition-opacity duration-200 hover:opacity-90"
-              >
-                <Icon name="mail" />
-                {t.emailLabel}
-              </a>
-            </div>
-          </div>
-
-          <div class:list={['grid', CV_ENABLED && 'sm:grid-cols-2']}>
-            <div class:list={['p-5 sm:p-6', CV_ENABLED && 'border-b border-line sm:border-r sm:border-b-0']}>
-              <p class="eyebrow">{t.profilesLabel}</p>
-              <ul class="mt-3 flex flex-col gap-2">
-                <li>
-                  <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-sm font-medium">
-                    <Icon name="github" />
-                    <span class="link-underline">github.com/ajlittlebro</span>
-                    <Icon name="arrow-up-right" size={14} class="text-subtle transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      <!-- CV hub -->
+      <div class="reveal lg:col-span-5">
+        <p class="eyebrow">{t.cvTitle}</p>
+        <ul class="mt-3 grid gap-3">
+          {
+            t.cvCards.map((c) => (
+              <li class="panel p-5">
+                <p class="flex items-center justify-between font-mono text-[11px] tracking-wide text-ink-3 uppercase">
+                  <span>{c.lang}</span>
+                  <span class="text-ink-2">DSGVO / GDPR</span>
+                </p>
+                <p class="mt-2 font-display text-xl font-bold text-brand">{c.title}</p>
+                <p class="mt-0.5 font-mono text-[11px] break-all text-ink-3">{c.file}</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <a href={c.href} download={c.file} class="inline-flex h-10 items-center gap-2 rounded-lg bg-brand px-4 text-sm font-semibold text-on-brand transition-opacity duration-200 hover:opacity-90">
+                    <Icon name="download" />
+                    {c.download}
                   </a>
-                </li>
-                <li>
-                  <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-sm font-medium">
-                    <Icon name="linkedin" />
-                    <span class="link-underline">linkedin.com/in/alain-tolentinoi</span>
-                    <Icon name="arrow-up-right" size={14} class="text-subtle transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </a>
-                </li>
-              </ul>
-            </div>
-            {
-              CV_ENABLED && (
-                <div class="p-5 sm:p-6">
-                  <p class="eyebrow">{t.cvLabel}</p>
-                  <a href={hero.cvHref} download={hero.cvFile} class="group mt-3 inline-flex items-center gap-2 text-sm font-medium">
-                    <Icon name="download" class="transition-transform duration-200 group-hover:translate-y-0.5" />
-                    <span class="link-underline">{hero.ctaCv}</span>
+                  <a href={c.href} target="_blank" rel="noopener" class="inline-flex h-10 items-center gap-2 rounded-lg border border-strong px-4 text-sm font-medium transition-colors duration-200 hover:border-brand">
+                    {c.open}
+                    <Icon name="arrow-up-right" size={14} />
                   </a>
                 </div>
-              )
-            }
-          </div>
-        </div>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-3 flex items-start gap-2 text-xs leading-5 text-ink-2">
+          <Icon name="lock" size={13} class="mt-1 shrink-0" />
+          {t.cvNote}
+        </p>
       </div>
     </div>
   </div>

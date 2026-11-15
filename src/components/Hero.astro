@@ -3,166 +3,109 @@ import { Picture } from 'astro:assets';
 import portrait from '../assets/portrait.jpg';
 import Icon from './Icon.astro';
 import CopyEmail from './CopyEmail.astro';
-import { getDict, PROFILE, CV_ENABLED, type Lang } from '../i18n';
+import { getDict, PROFILE, CV, type Lang } from '../i18n';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = getDict(lang).hero;
+const d = getDict(lang);
+const t = d.hero;
+const btnSecondary =
+  'group inline-flex h-11 items-center gap-2 rounded-lg border border-strong bg-surface px-4 text-sm font-medium text-ink transition-colors duration-200 hover:border-brand';
 ---
 
-<section class="relative overflow-hidden border-b border-line" aria-labelledby="hero-title">
-  <!-- Technical grid paper, faded towards the bottom-left -->
-  <div
-    class="grid-paper pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(ellipse_at_top_right,black_5%,transparent_60%)]"
-    aria-hidden="true"
-  >
-  </div>
+<section class="relative overflow-hidden border-b border-hairline" aria-labelledby="hero-title">
+  <div class="blueprint pointer-events-none absolute inset-0" aria-hidden="true"></div>
 
-  <!-- Technical status bar -->
-  <div class="relative border-b border-line bg-surface/70">
-    <ul
-      class="container-page flex flex-col gap-1.5 py-3 font-mono text-[11px] leading-5 tracking-wide text-muted uppercase sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5"
-    >
-      <li class="inline-flex items-center gap-1.5">
-        <Icon name="map-pin" size={12} />
-        {t.techBar.location}
-      </li>
-      <li class="hidden text-line-strong sm:block" aria-hidden="true">/</li>
-      <li>{t.techBar.status}</li>
-      <li class="hidden text-line-strong sm:block" aria-hidden="true">/</li>
-      <li class="inline-flex items-center gap-2 text-fg">
-        <span class="relative flex size-2 shrink-0" aria-hidden="true">
-          <span class="absolute inline-flex size-full animate-ping rounded-full bg-ok opacity-50 motion-reduce:hidden"></span>
-          <span class="relative inline-flex size-2 rounded-full bg-ok"></span>
-        </span>
-        {t.techBar.availability}
-      </li>
-    </ul>
-  </div>
+  <div class="container-page relative grid gap-12 pt-12 pb-16 md:pt-16 lg:grid-cols-12 lg:gap-10 lg:pt-20 lg:pb-24">
+    <!-- Identity & value proposition (7 cols) -->
+    <div class="lg:col-span-7">
+      <p class="eyebrow flex items-start gap-2 text-ink-2">
+        <Icon name="map-pin" size={13} class="mt-px shrink-0 text-workbench-ink" />
+        <span>{t.eyebrow}</span>
+      </p>
+      <h1 id="hero-title" class="display-xl mt-6 text-balance text-brand">{t.name}</h1>
+      <p class="mt-6 max-w-2xl text-base text-pretty text-ink-2 sm:text-lg sm:leading-8">{t.lead}</p>
 
-  <div class="container-page relative pt-10 pb-16 md:pt-16 md:pb-24">
-    <div class="grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
-      <!-- Text column -->
-      <div class="order-2 lg:order-1 lg:col-span-7 lg:pt-4">
-        <p class="eyebrow text-primary">{lang === 'de' ? '00 // Profil' : '00 // Profile'}</p>
-        <h1 id="hero-title" class="mt-5 text-4xl leading-[1.04] font-semibold tracking-tight text-balance text-primary sm:text-5xl lg:text-[3.6rem]">
-          {t.name}
-        </h1>
-        <p class="mt-5 text-lg font-medium tracking-tight sm:text-xl">{t.role}</p>
-        <p class="mt-2 font-mono text-[12.5px] leading-6 text-muted">{t.degree}</p>
-        <p class="mt-6 max-w-2xl text-base leading-7 text-pretty text-muted sm:text-lg sm:leading-8">{t.lead}</p>
+      <a
+        href={`#${d.sections.projects}`}
+        class="group mt-9 inline-flex h-12 items-center gap-2 rounded-lg bg-brand px-6 text-[15px] font-semibold text-on-brand transition-opacity duration-200 hover:opacity-90"
+      >
+        {t.ctaProjects}
+        <Icon name="arrow-right" class="transition-transform duration-200 group-hover:translate-x-0.5" />
+      </a>
 
-        <div class="mt-8 flex flex-wrap items-center gap-3">
-          <a
-            href="#projects"
-            class="group inline-flex h-11 items-center gap-2 rounded-lg bg-primary px-5 text-sm font-medium text-primary-fg transition-opacity duration-200 hover:opacity-90"
-          >
-            {t.ctaProjects}
-            <Icon name="arrow-right" class="transition-transform duration-200 group-hover:translate-x-0.5" />
-          </a>
-          {
-            CV_ENABLED && (
-              <a
-                href={t.cvHref}
-                download={t.cvFile}
-                class="group inline-flex h-11 items-center gap-2 rounded-lg border border-line-strong bg-surface px-4 text-sm font-medium transition-colors duration-200 hover:border-primary"
-              >
-                <Icon name="download" class="transition-transform duration-200 group-hover:translate-y-0.5" />
-                {t.ctaCv}
-              </a>
-            )
-          }
-          <CopyEmail lang={lang} />
-        </div>
-        <div class="mt-4 flex items-center gap-1 font-mono text-xs">
-          <a
-            href={PROFILE.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex h-9 items-center gap-2 rounded-md px-2 text-muted transition-colors duration-200 hover:bg-surface-2 hover:text-fg"
-          >
-            <Icon name="github" size={16} />
-            github.com/ajlittlebro
-          </a>
-          <a
-            href={PROFILE.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex h-9 items-center gap-2 rounded-md px-2 text-muted transition-colors duration-200 hover:bg-surface-2 hover:text-fg"
-          >
-            <Icon name="linkedin" size={16} />
-            LinkedIn
-          </a>
-        </div>
+      <div class="mt-3 flex flex-wrap gap-3">
+        <a href={CV.de.href} download={CV.de.file} hreflang="de" class={btnSecondary}>
+          <Icon name="download" class="transition-transform duration-200 group-hover:translate-y-0.5" />
+          {t.cvDe}
+        </a>
+        <a href={CV.en.href} download={CV.en.file} hreflang="en" class={btnSecondary}>
+          <Icon name="download" class="transition-transform duration-200 group-hover:translate-y-0.5" />
+          {t.cvEn}
+        </a>
+        <CopyEmail lang={lang} />
       </div>
 
-      <!-- Portrait in an editorial frame with registration marks -->
-      <div class="order-1 lg:order-2 lg:col-span-5">
-        <figure class="relative w-full max-w-[11rem] sm:mx-auto sm:max-w-xs lg:mr-0 lg:ml-auto lg:max-w-sm">
-          <div class="relative border border-line-strong bg-surface p-2">
-            <span class="absolute -top-1.5 -left-1.5 size-3 border-t-2 border-l-2 border-primary" aria-hidden="true"></span>
-            <span class="absolute -top-1.5 -right-1.5 size-3 border-t-2 border-r-2 border-primary" aria-hidden="true"></span>
-            <span class="absolute -bottom-1.5 -left-1.5 size-3 border-b-2 border-l-2 border-primary" aria-hidden="true"></span>
-            <span class="absolute -right-1.5 -bottom-1.5 size-3 border-r-2 border-b-2 border-primary" aria-hidden="true"></span>
-            <Picture
-              src={portrait}
-              alt={t.photoAlt}
-              formats={['avif', 'webp']}
-              widths={[320, 480, 640, 800]}
-              sizes="(min-width: 1024px) 384px, (min-width: 640px) 320px, 176px"
-              loading="eager"
-              fetchpriority="high"
-              class="aspect-[4/5] w-full bg-surface-2 object-cover object-top"
-            />
-          </div>
-          <figcaption class="mt-3 flex items-center justify-between font-mono text-[11px] text-subtle uppercase">
-            <span>{t.photoCaption}</span>
-            <span class="hidden sm:inline">TU Dresden · UANL</span>
-          </figcaption>
-        </figure>
+      <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[13px]">
+        <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" class="group inline-flex min-h-11 items-center gap-2 text-ink-2 hover:text-ink">
+          <Icon name="github" size={17} />
+          <span class="link-underline">GitHub {PROFILE.githubHandle}</span>
+          <Icon name="arrow-up-right" size={13} class="text-ink-3" />
+        </a>
+        <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" class="group inline-flex min-h-11 items-center gap-2 text-ink-2 hover:text-ink">
+          <Icon name="linkedin" size={17} />
+          <span class="link-underline">LinkedIn</span>
+          <Icon name="arrow-up-right" size={13} class="text-ink-3" />
+        </a>
       </div>
     </div>
 
-    <!-- Key indicators -->
-    <ul class="mt-14 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3">
-      {
-        t.indicators.map((k, i) => (
-          <li class="flex flex-col gap-2 bg-surface p-5 sm:p-6">
-            <span class="font-mono text-[11px] text-subtle uppercase">
-              0{i + 1} · {k.label}
-            </span>
-            <span class="font-mono text-2xl font-medium tracking-tight text-primary sm:text-[1.7rem]">{k.value}</span>
-            <span class="text-xs leading-5 text-muted">{k.sub}</span>
-          </li>
-        ))
-      }
-    </ul>
+    <!-- Portrait dossier & telemetry (5 cols) -->
+    <div class="grid gap-4 sm:grid-cols-[minmax(0,15rem)_1fr] lg:col-span-5 lg:grid-cols-1">
+      <figure class="relative w-44 sm:w-full lg:mx-auto lg:max-w-[19rem]">
+        <div class="relative border border-strong bg-surface p-2">
+          <span class="absolute -top-1.5 -left-1.5 size-3 border-t-2 border-l-2 border-workbench" aria-hidden="true"></span>
+          <span class="absolute -top-1.5 -right-1.5 size-3 border-t-2 border-r-2 border-workbench" aria-hidden="true"></span>
+          <span class="absolute -bottom-1.5 -left-1.5 size-3 border-b-2 border-l-2 border-workbench" aria-hidden="true"></span>
+          <span class="absolute -right-1.5 -bottom-1.5 size-3 border-r-2 border-b-2 border-workbench" aria-hidden="true"></span>
+          <Picture
+            src={portrait}
+            alt={t.photoAlt}
+            formats={['avif', 'webp']}
+            widths={[320, 480, 640]}
+            sizes="(min-width: 1024px) 304px, (min-width: 640px) 240px, 176px"
+            width={640}
+            height={819}
+            loading="eager"
+            fetchpriority="high"
+            class="aspect-[4/5] h-auto w-full bg-subtle object-cover object-top"
+          />
+        </div>
+        <figcaption class="mt-2.5 flex justify-between font-mono text-[10.5px] tracking-wide text-ink-3 uppercase">
+          <span>{t.photoCaption}</span>
+          <span class="hidden sm:inline">51.05° N · 13.74° E</span>
+        </figcaption>
+      </figure>
 
-    <!-- Internship key facts -->
-    <div class="mt-4 overflow-hidden rounded-xl border border-line bg-surface">
-      <div class="flex items-center justify-between border-b border-line px-5 py-3">
-        <h2 class="eyebrow text-primary">{t.availabilityTitle}</h2>
-        <span class="font-mono text-[11px] text-subtle" aria-hidden="true">2027-03 → 2027-08</span>
+      <div class="lg:mx-auto lg:w-full lg:max-w-[19rem]">
+        <p class="eyebrow mb-2">{t.telemetryTitle}</p>
+        <ul class="grid gap-px overflow-hidden rounded-xl border border-hairline bg-hairline">
+          {
+            t.metrics.map((m, i) => (
+              <li class="bg-surface px-4 py-3.5">
+                <p class="flex items-baseline justify-between gap-3">
+                  <span class="font-mono text-xl font-semibold tracking-tight text-brand">{m.value}</span>
+                  <span class="font-mono text-[10px] text-ink-3">T-0{i + 1}</span>
+                </p>
+                <p class="mt-1 text-sm font-semibold text-ink">{m.label}</p>
+                <p class="text-xs leading-5 text-ink-2">{m.sub}</p>
+              </li>
+            ))
+          }
+        </ul>
       </div>
-      <dl class="grid md:grid-cols-2">
-        {
-          t.availability.map((row, i) => (
-            <div
-              class:list={[
-                'grid gap-1 border-line px-5 py-3 sm:grid-cols-[6.5rem_1fr] sm:gap-4',
-                i > 0 && 'border-t',
-                i === 1 && 'md:border-t-0',
-                i % 2 === 1 && 'md:border-l',
-              ]}
-            >
-              <dt class="font-mono text-xs leading-6 text-subtle">{row.label}</dt>
-              <dd class="text-sm leading-6">{row.value}</dd>
-            </div>
-          ))
-        }
-      </dl>
     </div>
   </div>
 </section>

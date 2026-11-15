@@ -1,8 +1,7 @@
 ---
-import SectionHeader from './SectionHeader.astro';
-import ProjectCard from './ProjectCard.astro';
-import ProjectCompact from './ProjectCompact.astro';
-import DemoCard from './DemoCard.astro';
+import SectionHead from './SectionHead.astro';
+import CaseStudy from './CaseStudy.astro';
+import ArchiveCard from './ArchiveCard.astro';
 import Icon from './Icon.astro';
 import { getDict, type Lang } from '../i18n';
 
@@ -10,36 +9,26 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = getDict(lang).projects;
-const featured = t.items.filter((p) => p.tier === 1);
-const more = t.items.filter((p) => p.tier === 2);
+const d = getDict(lang);
+const t = d.projects;
 ---
 
-<section id="projects" class="border-b border-line py-20 md:py-28" aria-labelledby="projects-title">
+<section id={d.sections.projects} class="border-b border-hairline py-20 md:py-28" aria-labelledby="projects-title">
   <div class="container-page">
-    <SectionHeader id="projects-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+    <SectionHead id="projects-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
 
-    <p class="eyebrow mt-14 mb-5">A · {t.tier1}</p>
-    <div class="grid gap-6">
-      {featured.map((p, i) => <ProjectCard project={p} index={i} labels={t.labels} lang={lang} />)}
+    <p class="eyebrow mt-16 mb-5 flex items-center gap-3"><span class="h-px w-6 bg-workbench" aria-hidden="true"></span>{t.tier1}</p>
+    <div class="grid gap-8">
+      {t.cases.map((c) => <CaseStudy item={c} labels={t.labels} />)}
     </div>
 
-    <p class="eyebrow mt-14 mb-5">B · {t.tier2}</p>
-    <div class="grid gap-5 md:grid-cols-2">
-      {more.map((p, i) => <ProjectCompact project={p} index={featured.length + i} labels={t.labels} />)}
-    </div>
-
-    <div class="mt-14 mb-5 flex flex-wrap items-baseline justify-between gap-2">
-      <p class="eyebrow">C · {t.tier3}</p>
-      <p class="text-sm text-muted">{t.tier3Intro}</p>
-    </div>
-    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-      {t.demos.map((d, i) => <DemoCard demo={d} index={i} />)}
-    </div>
-
-    <p class="mt-8 flex items-start gap-3 rounded-xl border border-line bg-surface px-4 py-3 text-sm leading-6 text-muted">
-      <Icon name="lock" size={16} class="mt-1 shrink-0 text-primary" />
-      <span>{t.securityNote}</span>
+    <p class="eyebrow mt-20 mb-5 flex items-center gap-3"><span class="h-px w-6 bg-workbench" aria-hidden="true"></span>{t.tier2}</p>
+    <p class="mb-6 flex items-start gap-3 rounded-xl border border-hairline bg-surface px-4 py-3 text-sm text-ink-2">
+      <Icon name="lock" size={16} class="mt-1 shrink-0 text-brand" />
+      <span>{t.privacyNote}</span>
     </p>
+    <div class="dim-group grid gap-6 md:grid-cols-2">
+      {t.archive.map((a) => <ArchiveCard item={a} />)}
+    </div>
   </div>
 </section>

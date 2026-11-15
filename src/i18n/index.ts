@@ -1,9 +1,9 @@
 import { de } from './de';
 import { en } from './en';
-import type { Dict, Lang } from './types';
+import type { Dict, Lang, SectionKey } from './types';
 
-export type { DemoProject, DiagramId, Dict, Lang, Project, ProjectLink, TimelineItem } from './types';
-export { PROFILE, REPOS, CV_ENABLED } from './shared';
+export type { ArchiveItem, CaseStudy, DiagramId, Dict, Lang, ProjectLink, SectionKey, TimelineItem } from './types';
+export { PROFILE, REPOS, CV } from './shared';
 
 const dicts: Record<Lang, Dict> = { de, en };
 
@@ -16,3 +16,5 @@ export const ROUTES = {
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
+
+export const SECTION_ORDER: SectionKey[] = ['projects', 'about', 'journey', 'stack', 'contact'];

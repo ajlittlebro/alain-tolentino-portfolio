@@ -10,22 +10,37 @@ const t = getDict(lang).footer;
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-line">
-  <div class="container-page flex flex-col gap-6 py-8 text-sm text-muted md:flex-row md:items-center md:justify-between">
-    <div class="flex flex-col gap-1">
-      <p>© {year} {t.rights}</p>
-      <p class="font-mono text-xs text-subtle">{t.built} · Dresden</p>
+<footer class="border-t border-hairline bg-surface">
+  <div class="container-page py-10">
+    <!-- Coordinates rule: Monterrey ─── Dresden -->
+    <p class="flex items-center gap-3 font-mono text-[11px] tracking-[0.12em] text-ink-3 uppercase" aria-label="Monterrey 25.68° N – Dresden 51.05° N">
+      <span class="shrink-0">MTY 25.68° N</span>
+      <span class="h-px flex-1 bg-strong" aria-hidden="true"></span>
+      <span class="hidden shrink-0 text-workbench-ink sm:inline">{t.tagline}</span>
+      <span class="hidden h-px flex-1 bg-strong sm:block" aria-hidden="true"></span>
+      <span class="shrink-0">DRS 51.05° N</span>
+    </p>
+
+    <div class="mt-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="text-sm text-ink">© {year} {t.rights}</p>
+        <p class="mt-1 font-mono text-xs text-ink-3">{t.built}</p>
+      </div>
+      <ul class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-2">
+        <li><a href={PROFILE.github} target="_blank" rel="noopener noreferrer" class="link-underline font-mono hover:text-ink">{PROFILE.githubHandle}</a></li>
+        <li><a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" class="link-underline font-mono hover:text-ink">{PROFILE.linkedinHandle}</a></li>
+        <li class="flex gap-1 font-mono text-xs">
+          <a href={ROUTES.home.de} hreflang="de" lang="de" aria-current={lang === 'de' ? 'true' : undefined} class="rounded px-1.5 py-0.5 hover:text-ink aria-[current=true]:bg-subtle aria-[current=true]:text-ink">DE</a>
+          <a href={ROUTES.home.en} hreflang="en" lang="en" aria-current={lang === 'en' ? 'true' : undefined} class="rounded px-1.5 py-0.5 hover:text-ink aria-[current=true]:bg-subtle aria-[current=true]:text-ink">EN</a>
+        </li>
+        <li><a href={ROUTES.privacy.de} hreflang="de" lang="de" class="link-underline hover:text-ink">Datenschutz</a></li>
+        <li><a href={ROUTES.privacy.en} hreflang="en" lang="en" class="link-underline hover:text-ink">Privacy</a></li>
+        <li>
+          <a href="#main" class="inline-flex items-center gap-1.5 hover:text-ink" aria-label={t.top}>
+            <Icon name="arrow-up" size={14} />
+          </a>
+        </li>
+      </ul>
     </div>
-    <ul class="flex flex-wrap items-center gap-x-5 gap-y-2">
-      <li><a href={ROUTES.privacy[lang]} class="link-underline hover:text-fg">{t.privacy}</a></li>
-      <li><a href={PROFILE.github} target="_blank" rel="noopener noreferrer" class="link-underline hover:text-fg">GitHub</a></li>
-      <li><a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" class="link-underline hover:text-fg">LinkedIn</a></li>
-      <li>
-        <a href="#main" class="inline-flex items-center gap-1.5 hover:text-fg" aria-label={t.top}>
-          <Icon name="arrow-up" size={14} />
-          <span class="hidden sm:inline">{t.top}</span>
-        </a>
-      </li>
-    </ul>
   </div>
 </footer>

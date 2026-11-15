@@ -1,48 +1,41 @@
 ---
 import Icon from './Icon.astro';
-import { getDict, ROUTES, type Lang, type RouteKey } from '../i18n';
+import { getDict, ROUTES, SECTION_ORDER, type Lang, type RouteKey } from '../i18n';
 
 interface Props {
   lang: Lang;
   route: RouteKey;
 }
-
 const { lang, route } = Astro.props;
 const t = getDict(lang);
+const other: Lang = lang === 'de' ? 'en' : 'de';
 const home = ROUTES.home[lang];
-const onHome = route === 'home';
-const anchor = (id: string) => (onHome ? `#${id}` : `${home}#${id}`);
+const anchor = (id: string) => (route === 'home' ? `#${id}` : `${home}#${id}`);
 
-const links = [
-  { id: 'projects', label: t.nav.projects },
-  { id: 'journey', label: t.nav.journey },
-  { id: 'skills', label: t.nav.skills },
-  { id: 'contact', label: t.nav.contact },
-];
+const links = SECTION_ORDER.map((key, i) => ({
+  id: t.sections[key],
+  num: String(i + 1).padStart(2, '0'),
+  label: t.nav.labels[key],
+}));
 
+// "projekte:projects,…" – used by the language switch to keep the current section
+const hashmap = SECTION_ORDER.map((k) => `${t.sections[k]}:${getDict(other).sections[k]}`).join(',');
 const langs: { code: Lang; href: string }[] = [
   { code: 'de', href: ROUTES[route].de },
   { code: 'en', href: ROUTES[route].en },
 ];
 ---
 
-<header
-  class="theme-transition sticky top-0 z-50 border-b border-line/80 bg-bg/80 backdrop-blur-md supports-[backdrop-filter]:bg-bg/70"
->
+<header class="theme-transition sticky top-0 z-50 border-b border-hairline bg-canvas/85 backdrop-blur-md">
   <div class="container-page flex h-16 items-center justify-between gap-4">
-    <a
-      href={home}
-      class="group flex items-center gap-2.5 rounded-md text-sm font-semibold tracking-tight"
-      aria-label={`Alain Tolentino – ${t.nav.home}`}
-    >
-      <span
-        class="grid size-7 place-items-center rounded-md bg-primary font-mono text-[11px] font-medium text-primary-fg transition-transform duration-300 group-hover:-rotate-6"
-        aria-hidden="true">AT</span
-      >
-      <span>Alain Tolentino</span>
+    <a href={home} class="group flex flex-col rounded-md leading-tight" aria-label={`Alain Tolentino – ${t.nav.home}`}>
+      <span class="font-mono text-sm font-semibold tracking-tight text-brand">
+        AT <span class="text-workbench-ink" aria-hidden="true">//</span> ajlittlebro
+      </span>
+      <span class="font-mono text-[10px] tracking-wider text-ink-3 uppercase">{t.nav.brandSub}</span>
     </a>
 
-    <nav aria-label="Primary" class="hidden md:block">
+    <nav aria-label={t.nav.primary} class="hidden lg:block">
       <ul class="flex items-center gap-1">
         {
           links.map((l) => (
@@ -50,8 +43,9 @@ const langs: { code: Lang; href: string }[] = [
               <a
                 href={anchor(l.id)}
                 data-spy={l.id}
-                class="rounded-md px-3 py-2 text-sm text-muted transition-colors hover:text-fg aria-[current=true]:text-fg"
+                class="group inline-flex items-baseline gap-1.5 rounded-md px-2.5 py-2 text-sm text-ink-2 transition-colors duration-200 hover:text-ink aria-[current=true]:text-brand"
               >
+                <span class="font-mono text-[11px] text-ink-3 group-aria-[current=true]:text-workbench-ink">{l.num}</span>
                 {l.label}
               </a>
             </li>
@@ -61,11 +55,7 @@ const langs: { code: Lang; href: string }[] = [
     </nav>
 
     <div class="flex items-center gap-1.5">
-      <div
-        class="flex items-center rounded-md border border-line p-0.5 font-mono text-xs"
-        role="group"
-        aria-label={t.nav.lang}
-      >
+      <div class="flex items-center rounded-md border border-hairline p-0.5 font-mono text-xs" role="group" aria-label={t.nav.lang}>
         {
           langs.map((l) => (
             <a
@@ -73,10 +63,11 @@ const langs: { code: Lang; href: string }[] = [
               hreflang={l.code}
               lang={l.code}
               data-lang-link
+              data-hashmap={hashmap}
               aria-current={l.code === lang ? 'true' : undefined}
               class:list={[
-                'rounded-[5px] px-2 py-1 uppercase transition-colors',
-                l.code === lang ? 'bg-primary text-primary-fg' : 'text-muted hover:text-fg',
+                'rounded-[5px] px-2 py-1 uppercase transition-colors duration-200',
+                l.code === lang ? 'bg-brand text-on-brand' : 'text-ink-2 hover:text-ink',
               ]}
             >
               {l.code}
@@ -88,41 +79,37 @@ const langs: { code: Lang; href: string }[] = [
       <button
         type="button"
         id="theme-toggle"
-        class="grid size-9 place-items-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
-        data-label-light={t.nav.themeToLight}
-        data-label-dark={t.nav.themeToDark}
+        class="grid size-10 place-items-center rounded-md text-ink-2 transition-colors duration-200 hover:bg-subtle hover:text-ink"
+        data-light={t.nav.themeToLight}
+        data-dark={t.nav.themeToDark}
         aria-label={t.nav.themeToDark}
       >
-        <Icon name="moon" size={17} class="theme-icon-moon" />
-        <Icon name="sun" size={17} class="theme-icon-sun hidden" />
+        <Icon name="moon" size={17} class="dark:hidden" />
+        <Icon name="sun" size={17} class="hidden dark:block" />
       </button>
 
       <button
         type="button"
         id="menu-toggle"
-        class="grid size-9 place-items-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg md:hidden"
+        class="grid size-10 place-items-center rounded-md text-ink-2 transition-colors duration-200 hover:bg-subtle hover:text-ink lg:hidden"
         aria-expanded="false"
         aria-controls="mobile-menu"
-        data-label-open={t.nav.openMenu}
-        data-label-close={t.nav.closeMenu}
+        data-open={t.nav.openMenu}
+        data-close={t.nav.closeMenu}
         aria-label={t.nav.openMenu}
       >
-        <Icon name="menu" size={18} class="menu-icon-open" />
-        <Icon name="x" size={18} class="menu-icon-close hidden" />
+        <Icon name="menu" size={18} />
       </button>
     </div>
   </div>
 
-  <nav id="mobile-menu" aria-label="Mobile" class="hidden border-t border-line bg-bg md:hidden">
-    <ul class="container-page flex flex-col py-3">
+  <nav id="mobile-menu" aria-label={t.nav.primary} class="border-t border-hairline bg-canvas lg:hidden" hidden>
+    <ul class="container-page flex flex-col py-2">
       {
-        links.map((l, i) => (
+        links.map((l) => (
           <li>
-            <a
-              href={anchor(l.id)}
-              class="flex items-baseline gap-3 border-b border-line py-4 text-lg font-medium tracking-tight last:border-0"
-            >
-              <span class="font-mono text-xs text-subtle">0{i + 1}</span>
+            <a href={anchor(l.id)} class="flex items-baseline gap-3 border-b border-hairline py-3.5 text-lg font-medium last:border-0">
+              <span class="font-mono text-xs text-workbench-ink">{l.num}</span>
               {l.label}
             </a>
           </li>
@@ -131,77 +118,3 @@ const langs: { code: Lang; href: string }[] = [
     </ul>
   </nav>
 </header>
-
-<script>
-  const root = document.documentElement;
-
-  // ---- Theme toggle ----
-  const themeBtn = document.getElementById('theme-toggle') as HTMLButtonElement | null;
-  const syncThemeUi = () => {
-    const dark = root.dataset.theme === 'dark';
-    themeBtn?.querySelector('.theme-icon-moon')?.classList.toggle('hidden', dark);
-    themeBtn?.querySelector('.theme-icon-sun')?.classList.toggle('hidden', !dark);
-    if (themeBtn) {
-      themeBtn.setAttribute('aria-label', (dark ? themeBtn.dataset.labelLight : themeBtn.dataset.labelDark) ?? '');
-    }
-  };
-  syncThemeUi();
-  themeBtn?.addEventListener('click', () => {
-    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem('theme', next);
-    } catch {
-      /* storage unavailable – theme still applies for this page view */
-    }
-    syncThemeUi();
-  });
-
-  // ---- Language switch keeps the current section ----
-  document.querySelectorAll<HTMLAnchorElement>('[data-lang-link]').forEach((a) => {
-    a.addEventListener('click', () => {
-      if (location.hash) a.href = a.href.split('#')[0] + location.hash;
-    });
-  });
-
-  // ---- Mobile menu ----
-  const menuBtn = document.getElementById('menu-toggle') as HTMLButtonElement | null;
-  const menu = document.getElementById('mobile-menu');
-  const setMenu = (open: boolean) => {
-    if (!menuBtn || !menu) return;
-    menu.classList.toggle('hidden', !open);
-    menuBtn.setAttribute('aria-expanded', String(open));
-    menuBtn.setAttribute('aria-label', (open ? menuBtn.dataset.labelClose : menuBtn.dataset.labelOpen) ?? '');
-    menuBtn.querySelector('.menu-icon-open')?.classList.toggle('hidden', open);
-    menuBtn.querySelector('.menu-icon-close')?.classList.toggle('hidden', !open);
-  };
-  menuBtn?.addEventListener('click', () => setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'));
-  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menuBtn?.getAttribute('aria-expanded') === 'true') {
-      setMenu(false);
-      menuBtn.focus();
-    }
-  });
-  window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => e.matches && setMenu(false));
-
-  // ---- Scroll spy for desktop nav ----
-  const spyLinks = document.querySelectorAll<HTMLAnchorElement>('[data-spy]');
-  const sections = [...spyLinks]
-    .map((a) => document.getElementById(a.dataset.spy ?? ''))
-    .filter((s): s is HTMLElement => s !== null);
-  if (sections.length && 'IntersectionObserver' in window) {
-    const spy = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          spyLinks.forEach((a) =>
-            a.dataset.spy === entry.target.id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'),
-          );
-        }
-      },
-      { rootMargin: '-45% 0px -50% 0px' },
-    );
-    sections.forEach((s) => spy.observe(s));
-  }
-</script>
