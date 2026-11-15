@@ -1,6 +1,7 @@
 ---
 import SectionHeader from './SectionHeader.astro';
 import ProjectCard from './ProjectCard.astro';
+import ProjectCompact from './ProjectCompact.astro';
 import { getDict, type Lang } from '../i18n';
 
 interface Props {
@@ -8,17 +9,22 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = getDict(lang).projects;
+const featured = t.items.filter((p) => p.tier === 1);
+const more = t.items.filter((p) => p.tier === 2);
 ---
 
 <section id="projects" class="border-b border-line py-20 md:py-28" aria-labelledby="projects-title">
   <div class="container-page">
     <SectionHeader id="projects-title" eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
-    <div class="mt-12 grid gap-5 md:mt-16">
-      {
-        t.items.map((p, i) => (
-          <ProjectCard project={p} index={i} stackLabel={t.stackLabel} resultLabel={t.resultLabel} />
-        ))
-      }
+
+    <p class="eyebrow mt-14 mb-5">A · {t.tier1}</p>
+    <div class="grid gap-6">
+      {featured.map((p, i) => <ProjectCard project={p} index={i} labels={t.labels} lang={lang} />)}
+    </div>
+
+    <p class="eyebrow mt-14 mb-5">B · {t.tier2}</p>
+    <div class="grid gap-5 md:grid-cols-2">
+      {more.map((p, i) => <ProjectCompact project={p} index={featured.length + i} labels={t.labels} />)}
     </div>
   </div>
 </section>

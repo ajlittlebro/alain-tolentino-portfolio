@@ -2,7 +2,7 @@ import { de } from './de';
 import { en } from './en';
 import type { Dict, Lang } from './types';
 
-export type { Dict, Lang, Project, ProjectLink, SubProject, TimelineItem } from './types';
+export type { DiagramId, Dict, Lang, Project, ProjectLink, TimelineItem } from './types';
 export { PROFILE, REPOS, CV_ENABLED } from './shared';
 
 const dicts: Record<Lang, Dict> = { de, en };

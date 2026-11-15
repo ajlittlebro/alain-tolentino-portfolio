@@ -6,32 +6,35 @@ export interface ProjectLink {
   href: string;
 }
 
-export interface SubProject {
-  title: string;
-  text: string;
-  links?: ProjectLink[];
-}
+/** Which inline SVG schematic a featured project shows. */
+export type DiagramId = 'tud' | 'shop' | 'ajschool';
 
 export interface Project {
   id: string;
+  /** 1 = featured (wide card + diagram), 2 = compact card */
+  tier: 1 | 2;
   title: string;
   subtitle?: string;
   period: string;
   context: string;
   scope: string;
-  scopeTone: 'client' | 'study' | 'ongoing';
-  summary: string;
-  bullets?: string[];
-  subprojects?: SubProject[];
-  caseStudy?: { label: string; text: string }[];
+  scopeTone: 'client' | 'study' | 'ongoing' | 'award';
+  /** KONTEXT & ROLLE */
+  role: string;
+  /** ARCHITEKTUR & UMSETZUNG */
+  build: string[];
+  /** ERGEBNIS */
+  outcome: string;
   metric?: { value: string; label: string };
+  diagram?: DiagramId;
   stack: string[];
   links: ProjectLink[];
   note?: string;
+  /** Full-width compact card (e.g. award strip) */
+  wide?: boolean;
 }
 
 export interface TimelineItem {
-  kind: 'edu' | 'work';
   period: string;
   place: string;
   title: string;
@@ -40,7 +43,7 @@ export interface TimelineItem {
 }
 
 export interface Dict {
-  meta: { title: string; description: string; ogLocale: string };
+  meta: { title: string; description: string; ogLocale: string; ogAlt: string };
   nav: {
     skip: string;
     projects: string;
@@ -55,13 +58,14 @@ export interface Dict {
     home: string;
   };
   hero: {
-    status: string;
+    techBar: { location: string; status: string; availability: string };
     name: string;
     role: string;
     degree: string;
     lead: string;
     photoAlt: string;
-    facts: { value: string; label: string }[];
+    photoCaption: string;
+    indicators: { value: string; label: string; sub: string }[];
     availabilityTitle: string;
     availability: { label: string; value: string }[];
     ctaProjects: string;
@@ -69,24 +73,26 @@ export interface Dict {
     cvHref: string;
     cvFile: string;
   };
+  copyEmail: { copy: string; copied: string; srCopied: string };
   projects: {
     eyebrow: string;
     title: string;
     intro: string;
-    stackLabel: string;
-    resultLabel: string;
+    tier1: string;
+    tier2: string;
+    labels: { role: string; build: string; outcome: string; stack: string; schema: string };
     items: Project[];
   };
   journey: {
     eyebrow: string;
     title: string;
     intro: string;
-    filterLabel: string;
-    filters: { all: string; edu: string; work: string };
-    kindLabel: { edu: string; work: string };
+    eduTitle: string;
+    workTitle: string;
     showDetails: string;
     hideDetails: string;
-    items: TimelineItem[];
+    education: TimelineItem[];
+    experience: TimelineItem[];
   };
   skills: {
     eyebrow: string;
@@ -108,17 +114,15 @@ export interface Dict {
     title: string;
     text: string;
     emailLabel: string;
-    copy: string;
-    copied: string;
     profilesLabel: string;
     cvLabel: string;
   };
+  footer: { rights: string; built: string; privacy: string; top: string };
   privacy: {
     title: string;
     updated: string;
     back: string;
     sections: { heading: string; paragraphs: string[] }[];
   };
-  footer: { rights: string; built: string; privacy: string; top: string };
   notFound: { title: string; text: string; back: string };
 }

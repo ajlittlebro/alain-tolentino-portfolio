@@ -36,7 +36,7 @@ const langs: { code: Lang; href: string }[] = [
       aria-label={`Alain Tolentino – ${t.nav.home}`}
     >
       <span
-        class="grid size-7 place-items-center rounded-md bg-fg font-mono text-[11px] font-medium text-bg transition-transform duration-300 group-hover:-rotate-6"
+        class="grid size-7 place-items-center rounded-md bg-primary font-mono text-[11px] font-medium text-primary-fg transition-transform duration-300 group-hover:-rotate-6"
         aria-hidden="true">AT</span
       >
       <span>Alain Tolentino</span>
@@ -76,7 +76,7 @@ const langs: { code: Lang; href: string }[] = [
               aria-current={l.code === lang ? 'true' : undefined}
               class:list={[
                 'rounded-[5px] px-2 py-1 uppercase transition-colors',
-                l.code === lang ? 'bg-fg text-bg' : 'text-muted hover:text-fg',
+                l.code === lang ? 'bg-primary text-primary-fg' : 'text-muted hover:text-fg',
               ]}
             >
               {l.code}

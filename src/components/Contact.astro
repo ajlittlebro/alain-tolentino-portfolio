@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import CopyEmail from './CopyEmail.astro';
 import { getDict, PROFILE, CV_ENABLED, type Lang } from '../i18n';
 
 interface Props {
@@ -13,39 +14,32 @@ const hero = dict.hero;
 
 <section id="contact" class="py-20 md:py-28" aria-labelledby="contact-title">
   <div class="container-page">
-    <div class="reveal grid gap-10 md:grid-cols-12 md:gap-8">
-      <div class="md:col-span-4">
-        <p class="eyebrow pt-1.5">{t.eyebrow}</p>
+    <div class="reveal">
+      <div class="flex items-center gap-4">
+        <p class="eyebrow shrink-0 text-primary">{t.eyebrow}</p>
+        <span class="h-px flex-1 bg-line-strong" aria-hidden="true"></span>
       </div>
-      <div class="md:col-span-8">
-        <h2 id="contact-title" class="text-3xl font-semibold tracking-tight text-balance sm:text-5xl">{t.title}</h2>
-        <p class="mt-5 max-w-2xl text-base leading-7 text-pretty text-muted sm:text-lg sm:leading-8">{t.text}</p>
 
-        <div class="mt-10 overflow-hidden rounded-2xl border border-line bg-surface">
-          <div class="flex flex-col gap-4 border-b border-line p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-            <div class="min-w-0">
-              <p class="eyebrow">{t.emailLabel}</p>
+      <div class="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-12">
+        <div class="lg:col-span-6">
+          <h2 id="contact-title" class="text-3xl font-semibold tracking-tight text-balance text-primary sm:text-5xl">{t.title}</h2>
+          <p class="mt-5 max-w-xl text-base leading-7 text-pretty text-muted sm:text-lg sm:leading-8">{t.text}</p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-line bg-surface lg:col-span-6">
+          <div class="border-b border-line p-5 sm:p-6">
+            <p class="eyebrow">{t.emailLabel}</p>
+            <a
+              href={`mailto:${PROFILE.email}`}
+              class="link-underline mt-1.5 inline-block font-mono text-base font-medium tracking-tight break-all text-primary sm:text-lg"
+            >
+              {PROFILE.email}
+            </a>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <CopyEmail lang={lang} />
               <a
                 href={`mailto:${PROFILE.email}`}
-                class="link-underline mt-1.5 inline-block text-lg font-medium tracking-tight break-all sm:text-xl"
-              >
-                {PROFILE.email}
-              </a>
-            </div>
-            <div class="flex shrink-0 gap-2">
-              <button
-                type="button"
-                data-copy={PROFILE.email}
-                data-label-copied={t.copied}
-                class="inline-flex h-10 items-center gap-2 rounded-lg border border-line-strong px-4 text-sm font-medium transition-colors hover:border-fg"
-              >
-                <Icon name="copy" class="copy-icon" />
-                <Icon name="check" class="check-icon hidden text-ok" />
-                <span class="copy-label">{t.copy}</span>
-              </button>
-              <a
-                href={`mailto:${PROFILE.email}`}
-                class="inline-flex h-10 items-center gap-2 rounded-lg bg-fg px-4 text-sm font-medium text-bg transition-opacity hover:opacity-90"
+                class="inline-flex h-11 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-fg transition-opacity duration-200 hover:opacity-90"
               >
                 <Icon name="mail" />
                 {t.emailLabel}
@@ -61,14 +55,14 @@ const hero = dict.hero;
                   <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-sm font-medium">
                     <Icon name="github" />
                     <span class="link-underline">github.com/ajlittlebro</span>
-                    <Icon name="arrow-up-right" size={14} class="text-subtle transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <Icon name="arrow-up-right" size={14} class="text-subtle transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 </li>
                 <li>
                   <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-sm font-medium">
                     <Icon name="linkedin" />
                     <span class="link-underline">linkedin.com/in/alain-tolentinoi</span>
-                    <Icon name="arrow-up-right" size={14} class="text-subtle transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <Icon name="arrow-up-right" size={14} class="text-subtle transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 </li>
               </ul>
@@ -78,7 +72,7 @@ const hero = dict.hero;
                 <div class="p-5 sm:p-6">
                   <p class="eyebrow">{t.cvLabel}</p>
                   <a href={hero.cvHref} download={hero.cvFile} class="group mt-3 inline-flex items-center gap-2 text-sm font-medium">
-                    <Icon name="download" class="transition-transform group-hover:translate-y-0.5" />
+                    <Icon name="download" class="transition-transform duration-200 group-hover:translate-y-0.5" />
                     <span class="link-underline">{hero.ctaCv}</span>
                   </a>
                 </div>
@@ -90,27 +84,3 @@ const hero = dict.hero;
     </div>
   </div>
 </section>
-
-<script>
-  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
-    const label = btn.querySelector('.copy-label');
-    const original = label?.textContent ?? '';
-    btn.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
-      } catch {
-        // Clipboard unavailable (e.g. insecure context): fall back to mailto.
-        window.location.href = `mailto:${btn.dataset.copy}`;
-        return;
-      }
-      if (label) label.textContent = btn.dataset.labelCopied ?? original;
-      btn.querySelector('.copy-icon')?.classList.add('hidden');
-      btn.querySelector('.check-icon')?.classList.remove('hidden');
-      setTimeout(() => {
-        if (label) label.textContent = original;
-        btn.querySelector('.copy-icon')?.classList.remove('hidden');
-        btn.querySelector('.check-icon')?.classList.add('hidden');
-      }, 2000);
-    });
-  });
-</script>

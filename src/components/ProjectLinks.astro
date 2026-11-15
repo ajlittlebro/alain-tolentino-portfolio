@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import type { ProjectLink } from '../i18n';
+
+interface Props {
+  links: ProjectLink[];
+  note?: string;
+}
+const { links, note } = Astro.props;
+const iconFor = { demo: 'play', site: 'globe', repo: 'github' } as const;
+---
+
+{
+  (links.length > 0 || note) && (
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+      {links.map((l) => (
+        <a href={l.href} target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-sm font-medium text-accent">
+          <Icon name={iconFor[l.kind]} />
+          <span class="link-underline">{l.label}</span>
+          <Icon name="arrow-up-right" size={14} class="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </a>
+      ))}
+      {note && (
+        <p class="inline-flex items-center gap-1.5 text-sm text-muted">
+          <Icon name="lock" size={14} />
+          {note}
+        </p>
+      )}
+    </div>
+  )
+}

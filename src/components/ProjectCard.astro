@@ -1,159 +1,105 @@
 ---
-import Icon from './Icon.astro';
-import type { Project, ProjectLink } from '../i18n';
+/** Tier-1 project: wide card with an inline SVG schematic and three labelled blocks. */
+import ScopeBadge from './ScopeBadge.astro';
+import ProjectLinks from './ProjectLinks.astro';
+import TudDiagram from './diagrams/TudDiagram.astro';
+import ShopDiagram from './diagrams/ShopDiagram.astro';
+import AjSchoolDiagram from './diagrams/AjSchoolDiagram.astro';
+import type { Dict, Lang, Project } from '../i18n';
 
 interface Props {
   project: Project;
   index: number;
-  stackLabel: string;
-  resultLabel: string;
+  labels: Dict['projects']['labels'];
+  lang: Lang;
 }
 
-const { project: p, index, stackLabel } = Astro.props;
+const { project: p, index, labels, lang } = Astro.props;
 const num = String(index + 1).padStart(2, '0');
-
-const scopeClass = {
-  client: 'border-accent/40 bg-accent-soft text-accent',
-  study: 'border-line-strong text-muted',
-  ongoing: 'border-dashed border-line-strong text-muted',
-}[p.scopeTone];
-
-const linkIcon = (l: ProjectLink) => ({ demo: 'play', site: 'globe', repo: 'github' } as const)[l.kind];
+const Diagram = { tud: TudDiagram, shop: ShopDiagram, ajschool: AjSchoolDiagram }[p.diagram ?? 'tud'];
+// Alternate the diagram side on desktop for an editorial rhythm.
+const flip = index % 2 === 1;
 ---
 
-<article
-  class="reveal group/card relative grid gap-6 rounded-2xl border border-line bg-surface p-6 transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-[0_12px_32px_-16px_rgb(0_0_0/0.18)] sm:p-8 md:grid-cols-12 md:gap-8"
-  aria-labelledby={`project-${p.id}`}
->
-  <!-- Meta column -->
-  <div class="flex flex-col gap-4 md:col-span-4">
-    <div class="flex items-baseline justify-between gap-4 md:flex-col md:items-start md:gap-3">
-      <span class="font-mono text-4xl font-medium tracking-tight text-line-strong transition-colors duration-300 group-hover/card:text-accent sm:text-5xl" aria-hidden="true">{num}</span>
-      <span class="font-mono text-xs text-subtle">{p.period}</span>
+<article class="card reveal group/card overflow-hidden" aria-labelledby={`project-${p.id}`}>
+  <!-- Header strip -->
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-6 py-3 sm:px-8">
+    <div class="flex items-center gap-3 font-mono text-xs text-subtle">
+      <span class="text-primary transition-colors duration-200 group-hover/card:text-accent">P-{num}</span>
+      <span aria-hidden="true">/</span>
+      <span>{p.period}</span>
+      <span aria-hidden="true" class="hidden sm:inline">/</span>
+      <span class="hidden sm:inline">{p.context}</span>
     </div>
-    <div class="flex flex-col items-start gap-2 text-sm">
-      <p class="text-muted">{p.context}</p>
-      <p class:list={['inline-flex items-center gap-1.5 rounded-md border px-2 py-1 font-mono text-[11px] leading-4', scopeClass]}>
-        {p.scopeTone === 'client' && <span class="size-1.5 rounded-full bg-accent" aria-hidden="true" />}
-        {p.scope}
-      </p>
-    </div>
-
-    {
-      p.metric && (
-        <div class="mt-auto hidden rounded-xl border border-line bg-surface-2 p-4 md:block">
-          <p class="text-4xl font-semibold tracking-tight text-accent">{p.metric.value}</p>
-          <p class="mt-1 text-xs leading-5 text-muted">{p.metric.label}</p>
-        </div>
-      )
-    }
+    <ScopeBadge tone={p.scopeTone} label={p.scope} />
   </div>
 
-  <!-- Content column -->
-  <div class="flex flex-col md:col-span-8">
-    {p.subtitle && <p class="eyebrow mb-2">{p.subtitle}</p>}
-    <h3 id={`project-${p.id}`} class="text-xl font-semibold tracking-tight text-balance sm:text-2xl">
-      {p.title}
-    </h3>
-    <p class="mt-3 leading-7 text-pretty text-muted">{p.summary}</p>
-
+  <div class="grid lg:grid-cols-12">
+    <!-- Diagram -->
     {
-      p.metric && (
-        <div class="mt-5 flex items-baseline gap-3 rounded-xl border border-line bg-surface-2 p-4 md:hidden">
-          <p class="text-3xl font-semibold tracking-tight text-accent">{p.metric.value}</p>
-          <p class="text-xs leading-5 text-muted">{p.metric.label}</p>
+      p.diagram && (
+        <figure
+          class:list={[
+            'grid-paper relative border-b border-line bg-surface-2/40 p-5 sm:p-6 lg:col-span-5 lg:flex lg:flex-col lg:justify-center lg:border-b-0',
+            flip ? 'lg:order-2 lg:border-l' : 'lg:border-r',
+          ]}
+        >
+          <div class="mx-auto w-full max-w-md">
+            <Diagram lang={lang} />
+          </div>
+          <figcaption class="mt-2 font-mono text-[10.5px] tracking-wide text-subtle uppercase">
+            Fig. P-{num} · {labels.schema}
+          </figcaption>
+        </figure>
+      )
+    }
+
+    <!-- Content -->
+    <div class:list={['flex flex-col p-6 sm:p-8', p.diagram ? 'lg:col-span-7' : 'lg:col-span-12', flip && 'lg:order-1']}>
+      {p.subtitle && <p class="eyebrow mb-2">{p.subtitle}</p>}
+      <h3 id={`project-${p.id}`} class="text-xl font-semibold tracking-tight text-balance text-primary sm:text-2xl">{p.title}</h3>
+      <p class="mt-1 font-mono text-xs text-subtle sm:hidden">{p.context}</p>
+
+      <dl class="mt-6 divide-y divide-line border-y border-line">
+        <div class="grid gap-1.5 py-4 sm:grid-cols-[10.5rem_1fr] sm:gap-4">
+          <dt class="font-mono text-[11px] leading-6 tracking-wide text-subtle uppercase">{labels.role}</dt>
+          <dd class="text-sm leading-6 text-pretty">{p.role}</dd>
         </div>
-      )
-    }
+        <div class="grid gap-1.5 py-4 sm:grid-cols-[10.5rem_1fr] sm:gap-4">
+          <dt class="font-mono text-[11px] leading-6 tracking-wide text-subtle uppercase">{labels.build}</dt>
+          <dd>
+            <ul class="space-y-2">
+              {
+                p.build.map((b) => (
+                  <li class="relative pl-4 text-sm leading-6 text-pretty">
+                    <span class="absolute top-[0.7rem] left-0 h-px w-2 bg-primary" aria-hidden="true" />
+                    {b}
+                  </li>
+                ))
+              }
+            </ul>
+          </dd>
+        </div>
+        <div class="grid gap-1.5 py-4 sm:grid-cols-[10.5rem_1fr] sm:gap-4">
+          <dt class="font-mono text-[11px] leading-6 tracking-wide text-subtle uppercase">{labels.outcome}</dt>
+          <dd class="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm leading-6">
+            {p.metric && <span class="font-mono text-2xl font-medium tracking-tight text-accent">{p.metric.value}</span>}
+            <span class="text-pretty">{p.outcome}</span>
+          </dd>
+        </div>
+      </dl>
 
-    {
-      p.caseStudy && (
-        <dl class="mt-6 divide-y divide-line border-y border-line">
-          {p.caseStudy.map((c) => (
-            <div class="grid gap-1 py-3 sm:grid-cols-[8.5rem_1fr] sm:gap-4">
-              <dt class="font-mono text-xs leading-6 text-subtle">{c.label}</dt>
-              <dd class="text-sm leading-6">{c.text}</dd>
-            </div>
-          ))}
-        </dl>
-      )
-    }
-
-    {
-      p.bullets && (
-        <ul class="mt-5 space-y-2.5">
-          {p.bullets.map((b) => (
-            <li class="relative pl-5 text-sm leading-6">
-              <span class="absolute top-[0.7rem] left-0 h-px w-2.5 bg-subtle" aria-hidden="true" />
-              {b}
-            </li>
-          ))}
-        </ul>
-      )
-    }
-
-    {
-      p.subprojects && (
-        <ul class="mt-6 grid gap-3">
-          {p.subprojects.map((s) => (
-            <li class="rounded-xl border border-line p-4 sm:p-5">
-              <h4 class="text-sm font-semibold tracking-tight">{s.title}</h4>
-              <p class="mt-1.5 text-sm leading-6 text-muted">{s.text}</p>
-              {s.links && (
-                <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-                  {s.links.map((l) => (
-                    <a
-                      href={l.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center gap-1.5 text-sm font-medium text-accent"
-                    >
-                      <Icon name={linkIcon(l)} />
-                      <span class="link-underline">{l.label}</span>
-                      <Icon name="arrow-up-right" size={14} />
-                    </a>
-                  ))}
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      )
-    }
-
-    <div class="mt-6">
-      <ul class="flex flex-wrap gap-1.5" aria-label={stackLabel}>
-        {
-          p.stack.map((s) => (
-            <li class="rounded-md border border-line bg-surface-2 px-2 py-1 font-mono text-[11px] leading-4 text-muted">{s}</li>
-          ))
-        }
+      <ul class="mt-5 flex flex-wrap gap-1.5" aria-label={labels.stack}>
+        {p.stack.map((s) => <li class="rounded-md border border-line bg-surface-2 px-2 py-1 font-mono text-[11px] leading-4 text-muted">{s}</li>)}
       </ul>
-    </div>
 
-    {
-      (p.links.length > 0 || p.note) && (
-        <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-line pt-5">
-          {p.links.map((l) => (
-            <a
-              href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 text-sm font-medium text-accent"
-            >
-              <Icon name={linkIcon(l)} />
-              <span class="link-underline">{l.label}</span>
-              <Icon name="arrow-up-right" size={14} />
-            </a>
-          ))}
-          {p.note && (
-            <p class="inline-flex items-center gap-1.5 text-sm text-muted">
-              <Icon name="lock" size={14} />
-              {p.note}
-            </p>
-          )}
-        </div>
-      )
-    }
+      {
+        (p.links.length > 0 || p.note) && (
+          <div class="mt-6">
+            <ProjectLinks links={p.links} note={p.note} />
+          </div>
+        )
+      }
+    </div>
   </div>
 </article>

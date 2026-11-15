@@ -2,36 +2,41 @@
 
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
-/* ---------- Design tokens ---------- */
+/* ---------- Design tokens: "Swiss-German Technical Dossier" ----------
+   Palette synced with the Lebenslauf (navy #143656). */
 :root {
-  --bg: #fafafa;
+  --bg: #f8fafc; /* technical paper */
   --surface: #ffffff;
-  --surface-2: #f4f4f5;
-  --fg: #18181b;
-  --muted: #52525b;
-  --subtle: #71717a;
-  --line: #e4e4e7;
-  --line-strong: #d4d4d8;
+  --surface-2: #f1f5f9;
+  --fg: #0f172a;
+  --muted: #475569;
+  --subtle: #64748b;
+  --line: #e2e8f0;
+  --line-strong: #cbd5e1;
+  --primary: #143656; /* CV navy */
+  --primary-fg: #ffffff;
   --accent: #1d4ed8;
   --accent-fg: #ffffff;
-  --accent-soft: #eff4ff;
-  --ok: #15803d;
+  --accent-soft: #eff6ff;
+  --ok: #059669;
   color-scheme: light;
 }
 
 [data-theme='dark'] {
-  --bg: #0a0a0b;
-  --surface: #111113;
-  --surface-2: #18181b;
-  --fg: #ededed;
-  --muted: #a1a1aa;
-  --subtle: #8b8b94;
-  --line: #232326;
-  --line-strong: #34343a;
+  --bg: #0b1120;
+  --surface: #111827;
+  --surface-2: #162033;
+  --fg: #f1f5f9;
+  --muted: #94a3b8;
+  --subtle: #7d8ba1;
+  --line: #1e293b;
+  --line-strong: #334155;
+  --primary: #e2e8f0;
+  --primary-fg: #0b1120;
   --accent: #60a5fa;
-  --accent-fg: #0a0a0b;
-  --accent-soft: #0f1a2e;
-  --ok: #4ade80;
+  --accent-fg: #0b1120;
+  --accent-soft: #0c1e36;
+  --ok: #34d399;
   color-scheme: dark;
 }
 
@@ -44,6 +49,8 @@
   --color-subtle: var(--subtle);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
   --color-accent: var(--accent);
   --color-accent-fg: var(--accent-fg);
   --color-accent-soft: var(--accent-soft);
@@ -68,8 +75,8 @@
     text-rendering: optimizeLegibility;
   }
   ::selection {
-    background: var(--accent);
-    color: var(--accent-fg);
+    background: var(--primary);
+    color: var(--primary-fg);
   }
   :focus-visible {
     outline: 2px solid var(--accent);
@@ -79,7 +86,7 @@
   /* Smooth theme transition only after first paint */
   html.theme-ready body,
   html.theme-ready .theme-transition {
-    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 }
 
@@ -94,6 +101,7 @@
   }
 }
 
+/* Monospace technical label, e.g. "01 // PROJEKTE" */
 @utility eyebrow {
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -108,11 +116,31 @@
   background-size: 0% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
-  transition: background-size 0.25s ease;
+  transition: background-size 0.2s ease;
   &:hover,
   &:focus-visible {
     background-size: 100% 1px;
   }
+}
+
+/* Card with a subtle 200ms border/shadow transition */
+@utility card {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  &:hover {
+    border-color: var(--line-strong);
+    box-shadow: 0 12px 32px -18px rgb(15 23 42 / 0.22);
+  }
+}
+
+/* Technical grid paper (used behind diagrams and the hero) */
+@utility grid-paper {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 /* ---------- Reveal on scroll ---------- */
