@@ -117,7 +117,7 @@ export const de: Dict = {
         ],
         metric: { value: '+15 %', label: 'digitale Kursanfragen & prognostizierte Einschreibungen' },
         stack: ['Astro', 'Tailwind CSS', 'HTML5', 'CSS3', 'Firebase (NoSQL)', 'Formspree'],
-        links: [],
+        links: [{ kind: 'site', label: 'Live-Website', href: REPOS.ajschool }],
         note: 'Repository privat (Kundenprojekt)',
       },
       {

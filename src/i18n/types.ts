@@ -1,7 +1,7 @@
 export type Lang = 'de' | 'en';
 
 export interface ProjectLink {
-  kind: 'repo' | 'demo';
+  kind: 'repo' | 'demo' | 'site';
   label: string;
   href: string;
 }

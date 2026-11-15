@@ -9,6 +9,7 @@ export const REPOS = {
   shop: 'https://github.com/ajlittlebro/PWEB-APP-TIENDA',
   crossword: 'https://github.com/ajlittlebro/Juego-De-Mesa-Pensamiento-Creativo',
   crosswordDemo: 'https://pensamiento-fimenio.netlify.app/',
+  ajschool: 'https://theajschool.web.app/',
   sisdon: 'https://github.com/ajlittlebro/Sistema-SISDON-Proyecto-TPOO',
 } as const;
 

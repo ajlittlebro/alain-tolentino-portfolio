@@ -18,7 +18,7 @@ const scopeClass = {
   ongoing: 'border-dashed border-line-strong text-muted',
 }[p.scopeTone];
 
-const linkIcon = (l: ProjectLink) => (l.kind === 'demo' ? 'play' : 'github');
+const linkIcon = (l: ProjectLink) => ({ demo: 'play', site: 'globe', repo: 'github' } as const)[l.kind];
 ---
 
 <article
